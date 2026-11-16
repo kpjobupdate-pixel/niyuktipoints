@@ -3,759 +3,1081 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NiyuktiPoints — Diploma Study Material & Technical Jobs</title>
-  <meta name="description" content="Official BTEUP Diploma study material, semester-wise learning, and technical career opportunities — all in one place." />
+  <title>NiyuktiPoints — BTEUP Diploma Study Material, Notices & Technical Jobs</title>
+  <meta name="description" content="Official portal for UP Polytechnic (BTEUP) syllabus PDFs, semester notes, mock tests, and Junior Engineer (JE) recruitment updates." />
   <meta name="robots" content="index, follow" />
-  
+  <link rel="canonical" href="https://niyuktipoints.vercel.app/" />
+
+  <!-- Open Graph / Social Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NiyuktiPoints — BTEUP Diploma & JE Recruitment Portal" />
+  <meta property="og:description" content="Access verified BTEUP study notes, previous year papers, mock tests, and technical recruitment updates." />
+  <meta property="og:url" content="https://niyuktipoints.vercel.app/" />
+  <meta property="og:image" content="https://niyuktipoints.vercel.app/og-preview.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Clean Inline SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230284c7'/%3E%3Cpath d='M9 23V9h4.5l6.5 9V9h3v14h-4.5L12 14v9H9z' fill='%23ffffff'/%3E%3C/svg%3E" />
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 
-  <!-- Supabase SDK -->
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "NiyuktiPoints",
+    "url": "https://niyuktipoints.vercel.app/",
+    "description": "Educational resource and recruitment update platform for Diploma Engineering students.",
+    "email": "princeji9305@gmail.com",
+    "sameAs": [
+      "https://t.me/KP_CA"
+    ]
+  }
+  </script>
+
+  <!-- Official Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    /* CSS Variables matching exactly to Image 2 (1000095815.png) */
     :root {
-      --bg-body: #f4f7f9;
-      --bg-surface: #ffffff;
-      --text-main: #0f172a;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
       --text-muted: #64748b;
-      --text-light: #94a3b8;
-      --primary: #0f4c81; /* Deep Professional Blue */
-      --primary-hover: #0c3e6a;
-      --accent: #1668e3; /* Bright Blue for CTA */
-      --accent-hover: #1255ba;
-      --hero-bg: #eaf1fa;
-      --border: #e2e8f0;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 16px;
-      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.03);
-      --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
-      --nav-height: 72px;
+      --border-color: #e2e8f0;
+      --brand-primary: #0284c7;
+      --brand-hover: #0369a1;
+      --brand-subtle: #e0f2fe;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --warning: #d97706;
+      --radius: 12px;
+      --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+      --shadow-hover: 0 10px 25px -5px rgba(2, 132, 199, 0.12);
     }
 
     [data-theme="dark"] {
-      --bg-body: #0b1120;
-      --bg-surface: #1e293b;
-      --text-main: #f8fafc;
+      --bg-primary: #090d16;
+      --bg-secondary: #111827;
+      --bg-tertiary: #1f2937;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
       --text-muted: #94a3b8;
-      --text-light: #64748b;
-      --primary: #38bdf8;
-      --hero-bg: #0f172a;
-      --border: #334155;
-      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.2);
+      --border-color: #1e293b;
+      --brand-primary: #38bdf8;
+      --brand-hover: #7dd3fc;
+      --brand-subtle: #0c4a6e;
+      --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+      --shadow-hover: 0 10px 25px -5px rgba(56, 189, 248, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-body);
-      color: var(--text-main);
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
       line-height: 1.5;
+      font-size: 16px;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    a { color: var(--accent); text-decoration: none; transition: 0.2s; }
+    a { color: var(--brand-primary); text-decoration: none; transition: color 0.15s ease; }
     a:hover { text-decoration: underline; }
-    ul { list-style: none; }
-    button { font-family: inherit; border: none; cursor: pointer; transition: 0.2s; }
-    input, select { font-family: inherit; }
 
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
 
-    /* --- Navbar --- */
-    .navbar {
-      background: var(--bg-surface);
-      height: var(--nav-height);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* Top Bar */
+    .top-bar {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      font-size: 0.8125rem;
+      padding: 7px 0;
+      font-weight: 500;
+    }
+    .top-bar-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .top-bar a { color: #fef08a; text-decoration: underline; }
+
+    /* Study Timer Strip */
+    .study-tracker-strip {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 8px 0;
+      font-size: 0.825rem;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-secondary);
+    }
+
+    /* Header */
+    header {
       position: sticky;
       top: 0;
-      z-index: 100;
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
+      z-index: 50;
+      background-color: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
     }
-    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none !important; }
-    .brand svg { width: 36px; height: 36px; fill: var(--text-main); }
-    .brand-text { display: flex; flex-direction: column; }
-    .brand-title { font-weight: 800; font-size: 1.25rem; color: var(--text-main); line-height: 1.1; }
-    .brand-sub { font-size: 0.65rem; color: var(--text-muted); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+    [data-theme="dark"] header {
+      background-color: rgba(9, 13, 22, 0.85);
+    }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; height: 72px; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.2rem; color: var(--text-primary); text-decoration: none !important; }
+    .brand-mark { width: 40px; height: 40px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.05rem; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); }
+    
+    .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; }
+    .nav-links button {
+      background: none; border: none; color: var(--text-secondary); font-size: 0.925rem; font-weight: 600; cursor: pointer; padding: 6px 4px; font-family: inherit; transition: color 0.15s;
+    }
+    .nav-links button:hover, .nav-links button.active { color: var(--brand-primary); }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
 
-    .nav-links { display: flex; gap: 28px; align-items: center; }
-    .nav-link { 
-      font-size: 0.9rem; font-weight: 600; color: var(--text-main); 
-      display: flex; align-items: center; gap: 4px; background: none; 
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border-radius: var(--radius); font-size: 0.875rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; font-family: inherit; transition: all 0.2s ease; text-decoration: none !important;
     }
-    .nav-link.active { background: var(--primary); color: white; padding: 6px 14px; border-radius: 20px; }
-    .nav-link:hover:not(.active) { color: var(--accent); }
-    
-    .nav-actions { display: flex; align-items: center; gap: 16px; }
-    .theme-toggle { background: var(--bg-body); width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: var(--text-main); border: 1px solid var(--border); }
-    .btn-google {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--bg-surface); border: 1px solid var(--border);
-      padding: 8px 16px; border-radius: 24px; font-weight: 600; font-size: 0.875rem; color: var(--text-main);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-    .btn-google:hover { background: var(--bg-body); }
-    
-    /* --- Hero Section --- */
+    .btn-primary { background: linear-gradient(135deg, var(--brand-primary), var(--brand-hover)); color: #ffffff; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35); }
+    .btn-outline { background-color: transparent; border-color: var(--border-color); color: var(--text-primary); }
+    .btn-outline:hover { background-color: var(--bg-secondary); border-color: var(--brand-primary); }
+    .btn-google { background-color: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); box-shadow: var(--shadow-card); }
+    .btn-google:hover { background-color: var(--bg-secondary); }
+    .btn-danger { background-color: var(--danger); color: #ffffff; }
+
+    /* Hero Section with Gorgeous Visual Graphic */
     .hero {
-      background-color: var(--hero-bg);
-      background-image: radial-gradient(var(--border) 1px, transparent 1px);
-      background-size: 24px 24px;
-      padding: 60px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 60px 0 50px;
+      border-bottom: 1px solid var(--border-color);
+      background: radial-gradient(circle at 80% 20%, var(--brand-subtle) 0%, transparent 50%), var(--bg-secondary);
       position: relative;
       overflow: hidden;
     }
-    .hero-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.8); border: 1px solid var(--border);
-      padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--primary);
-      margin-bottom: 20px; backdrop-filter: blur(4px);
-    }
-    .hero h1 { font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.02em; }
-    .hero h1 span { color: var(--text-main); }
-    .hero p { font-size: 1.125rem; color: var(--text-muted); font-weight: 500; max-width: 500px; margin-bottom: 32px; line-height: 1.6; }
-    
-    .btn-primary {
-      background: var(--accent); color: white;
-      padding: 12px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600;
-      display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(22, 104, 227, 0.3);
-    }
-    .btn-primary:hover { background: var(--accent-hover); text-decoration: none; transform: translateY(-1px); }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+    .hero-badge { display: inline-block; background-color: var(--brand-subtle); color: var(--brand-primary); font-size: 0.775rem; font-weight: 700; padding: 6px 14px; border-radius: 6px; margin-bottom: 16px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; }
+    .hero h1 { font-size: 2.4rem; line-height: 1.15; letter-spacing: -0.025em; margin-bottom: 16px; color: var(--text-primary); font-weight: 800; }
+    .hero p { color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 24px; max-width: 54ch; }
+    .hero-cta-group { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
 
-    .hero-graphic {
-      width: 100%; height: 100%; min-height: 350px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400'%3E%3Cpath d='M100 350 L500 350 L450 150 L150 150 Z' fill='none' stroke='%23cbd5e1' stroke-width='2'/%3E%3Ccircle cx='300' cy='200' r='80' fill='none' stroke='%2338bdf8' stroke-width='4' stroke-dasharray='10 5'/%3E%3Cpath d='M250 250 L350 150 M350 250 L250 150' stroke='%23cbd5e1' stroke-width='2'/%3E%3Ccircle cx='300' cy='200' r='20' fill='%23f59e0b'/%3E%3Crect x='200' y='280' width='200' height='40' fill='%230f4c81' rx='4'/%3E%3C/svg%3E") center/contain no-repeat;
-    }
-
-    /* --- Main Dashboard Grid --- */
-    .dashboard-grid {
-      padding: 40px 0;
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 24px;
-    }
-    
-    .card {
-      background: var(--bg-surface);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
+    /* Visual Graphic Card in Hero */
+    .hero-visual-card {
+      background: linear-gradient(145deg, var(--bg-primary), var(--bg-tertiary));
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
       padding: 24px;
-      box-shadow: var(--shadow-card);
-      display: flex; flex-direction: column; gap: 16px;
+      box-shadow: var(--shadow-hover);
+      position: relative;
     }
-    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .card-title { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
-    .card-title svg { width: 24px; height: 24px; fill: var(--accent); }
-    .card-sub { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; margin-top: -12px; margin-left: 34px; }
-    .card-link { font-size: 0.85rem; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 4px; }
-
-    /* Explore by Branch */
-    .branch-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-    .branch-btn {
-      background: var(--bg-body); border: 1px solid var(--border); border-radius: var(--radius-md);
-      padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px;
-      font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-align: center;
+    .tech-graphic-box {
+      width: 100%;
+      height: 220px;
+      background: radial-gradient(circle at center, rgba(2, 132, 199, 0.1) 0%, transparent 70%);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px dashed var(--border-color);
     }
-    .branch-btn svg { width: 28px; height: 28px; fill: currentColor; }
-    .branch-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-    .branch-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
-
-    /* Select Semester */
-    .sem-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-    .sem-btn {
-      aspect-ratio: 1; background: var(--bg-body); border: 1px solid var(--border);
-      border-radius: var(--radius-md); display: grid; place-items: center;
-      font-size: 1.25rem; font-weight: 700; color: var(--text-main);
+    .pulse-ring {
+      width: 80px; height: 80px;
+      border: 2px solid var(--brand-primary);
+      border-radius: 50%;
+      animation: ripple 2.5s infinite ease-out;
+      position: absolute;
     }
-    .sem-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-    .sem-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
-
-    /* Learning Progress */
-    .progress-box { display: flex; gap: 20px; align-items: center; }
-    .progress-thumb {
-      width: 120px; height: 90px; background: #0f172a; border-radius: var(--radius-md);
-      display: grid; place-items: center; color: rgba(255,255,255,0.3); font-family: 'Times New Roman', serif; font-size: 2rem; font-style: italic;
+    @keyframes ripple {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(1.8); opacity: 0; }
     }
-    .progress-info { flex: 1; }
-    .progress-info h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
-    .progress-info p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
-    .progress-bar-bg { width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; display: flex; align-items: center; }
-    .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
-    .progress-row { display: flex; justify-content: space-between; align-items: center; }
-    .btn-resume { background: var(--accent); color: white; padding: 6px 14px; border-radius: 16px; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
 
-    /* Study Resources Table */
-    .resource-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-    .resource-table th { text-align: left; padding: 12px 8px; font-size: 0.85rem; color: var(--text-main); font-weight: 700; border-bottom: 1px solid var(--border); }
-    .resource-table td { padding: 12px 8px; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); border-bottom: 1px solid var(--border); }
-    .resource-table tr:last-child td { border-bottom: none; }
-    .icon-btn { color: var(--accent); background: var(--hero-bg); width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
-    .icon-btn:hover { background: var(--accent); color: white; }
-
-    /* Practice Grid */
-    .practice-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-    .practice-item {
-      background: var(--bg-body); border: 1px solid var(--border); border-radius: var(--radius-md);
-      padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px;
-      font-size: 0.85rem; font-weight: 600; color: var(--text-main); text-align: center;
-    }
-    .practice-item svg { width: 28px; height: 28px; fill: var(--primary); }
-
-    /* Ask a Doubt */
-    .doubt-form { display: flex; gap: 12px; align-items: center; background: var(--bg-body); border: 1px solid var(--border); padding: 6px; border-radius: 30px; margin-top: 8px; }
-    .doubt-form input { flex: 1; background: transparent; border: none; padding: 10px 16px; font-size: 0.95rem; outline: none; color: var(--text-main); }
-    .doubt-form input::placeholder { color: var(--text-light); }
-    .btn-doubt { background: var(--primary); color: white; padding: 10px 24px; border-radius: 24px; font-weight: 600; font-size: 0.9rem; }
-    .hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
-
-    /* Notices */
-    .notice-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-    .notice-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
+    /* Notice Board */
+    .notice-card { background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-card); }
+    .notice-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px; font-weight: 700; font-size: 0.925rem; }
+    .status-dot { display: inline-block; width: 9px; height: 9px; background-color: var(--success); border-radius: 50%; margin-right: 8px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+    .notice-list { list-style: none; display: flex; flex-direction: column; gap: 12px; max-height: 220px; overflow-y: auto; }
+    .notice-item { font-size: 0.875rem; padding-bottom: 10px; border-bottom: 1px dashed var(--border-color); }
     .notice-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .notice-title { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 500; color: var(--text-main); }
-    .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
-    .notice-date { font-size: 0.8rem; color: var(--text-muted); font-family: monospace; }
+    .notice-date { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--brand-primary); font-weight: 600; display: block; margin-bottom: 2px; }
 
-    /* Quick Links */
-    .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
-    .link-item { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
-    .link-item::before { content: "›"; color: var(--accent); font-size: 1.2rem; font-weight: bold; }
-    
-    /* Recruitment Banner */
-    .job-banner {
-      grid-column: 1 / -1;
-      background: linear-gradient(90deg, #eaf1fa 0%, #ffffff 100%);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 24px 32px;
-      display: flex; justify-content: space-between; align-items: center;
+    /* Sections */
+    .section { padding: 48px 0; border-bottom: 1px solid var(--border-color); }
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+    .section-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+    .section-subtitle { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* Filter Bar */
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; background: var(--bg-secondary); padding: 16px; border-radius: var(--radius); border: 1px solid var(--border-color); box-shadow: var(--shadow-card); }
+    .input, select, textarea { padding: 10px 14px; border: 1px solid var(--border-color); border-radius: var(--radius); background-color: var(--bg-primary); color: var(--text-primary); font-family: inherit; font-size: 0.9rem; width: 100%; transition: border-color 0.15s; }
+    .input:focus, select:focus, textarea:focus { outline: none; border-color: var(--brand-primary); box-shadow: 0 0 0 3px var(--brand-subtle); }
+
+    /* Cards & Grids */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
-    .job-info { display: flex; align-items: center; gap: 20px; }
-    .job-icon { width: 48px; height: 48px; background: var(--primary); border-radius: 12px; display: grid; place-items: center; }
-    .job-icon svg { width: 24px; height: 24px; fill: white; }
-    .job-text h3 { font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
-    .job-text p { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
-    .btn-dark { background: var(--primary); color: white; padding: 10px 24px; border-radius: 24px; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;}
-    
-    /* Footer */
-    footer { background: var(--bg-surface); padding: 32px 0; border-top: 1px solid var(--border); }
-    .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
-    .footer-links { display: flex; gap: 24px; }
-    .footer-links a { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
-    .social-links { display: flex; gap: 16px; align-items: center; }
-    .social-links svg { width: 20px; height: 20px; fill: var(--text-muted); transition: 0.2s; cursor: pointer; }
-    .social-links svg:hover { fill: var(--accent); }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--brand-primary); }
+    .card-meta { display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); }
+    .tag { background-color: var(--brand-subtle); color: var(--brand-primary); padding: 3px 10px; border-radius: 6px; font-weight: 600; }
+    .card h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+    .card p { font-size: 0.9rem; color: var(--text-secondary); }
 
-    /* Admin Panel Addon */
-    #admin-panel { display: none; grid-column: 1 / -1; background: #fff1f2; border: 1px solid #fecdd3; }
-    #admin-panel h3 { color: var(--danger); margin-bottom: 16px; }
-    .admin-forms { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-    .form-group input, .form-group select { padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.85rem; }
-    .btn-danger { background: var(--danger); color: white; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; }
+    /* Views */
+    .view-panel { display: none; }
+    .view-panel.active { display: block; }
 
-    /* Utilities */
-    #toast-box { position: fixed; top: 90px; right: 24px; z-index: 200; display: flex; flex-direction: column; gap: 10px; }
-    .toast { background: var(--text-main); color: var(--bg-surface); padding: 12px 20px; border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; box-shadow: var(--shadow-hover); }
-    
-    @media (max-width: 992px) {
-      .hero-content, .dashboard-grid { grid-template-columns: 1fr; }
-      .hero-graphic { display: none; }
+    /* User Chip */
+    .user-chip { display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius); font-size: 0.85rem; font-weight: 600; }
+    .coin-badge { font-family: 'JetBrains Mono', monospace; color: var(--warning); font-weight: 800; background: #fef3c7; padding: 2px 8px; border-radius: 4px; }
+    [data-theme="dark"] .coin-badge { background: #451a03; }
+
+    /* Locked / Unlocked Badges */
+    .locked-badge-box { background: var(--bg-secondary); border: 2px dashed var(--border-color); border-radius: var(--radius); padding: 28px; text-align: center; margin-top: 24px; }
+    .unlocked-badge-box { background: linear-gradient(135deg, var(--brand-subtle), var(--bg-primary)); border: 2px solid var(--brand-primary); border-radius: var(--radius); padding: 28px; margin-top: 24px; box-shadow: var(--shadow-hover); }
+
+    /* Live Chat Box */
+    .chat-box { background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius); height: 350px; display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-card); }
+    .chat-messages { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: var(--bg-secondary); }
+    .chat-msg { font-size: 0.875rem; padding: 10px 14px; border-radius: 8px; max-width: 85%; }
+    .chat-msg.self { background: var(--brand-primary); color: #ffffff; align-self: flex-end; box-shadow: var(--shadow-card); }
+    .chat-msg.other { background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); align-self: flex-start; }
+    .chat-input-area { display: flex; padding: 12px; border-top: 1px solid var(--border-color); background: var(--bg-primary); gap: 10px; }
+
+    /* Legal & Footer */
+    .legal-doc { max-width: 780px; margin: 0 auto; padding: 48px 0; }
+    .legal-doc h1 { font-size: 2rem; margin-bottom: 12px; font-weight: 800; }
+    .legal-doc h2 { font-size: 1.3rem; margin-top: 28px; margin-bottom: 10px; font-weight: 700; }
+    .legal-doc p, .legal-doc li { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 12px; }
+
+    .cookie-banner { position: fixed; bottom: 20px; left: 20px; right: 20px; max-width: 520px; background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 20px; box-shadow: 0 15px 30px -5px rgba(0,0,0,0.2); z-index: 100; display: none; }
+
+    #toast-box { position: fixed; top: 84px; right: 20px; z-index: 140; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background-color: var(--text-primary); color: var(--bg-primary); padding: 12px 18px; border-radius: var(--radius); font-size: 0.875rem; font-weight: 600; box-shadow: var(--shadow-hover); }
+
+    footer { background-color: var(--bg-secondary); padding: 50px 0 30px; font-size: 0.875rem; color: var(--text-secondary); border-top: 1px solid var(--border-color); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links button, .footer-links a { background: none; border: none; color: var(--text-secondary); font-size: 0.875rem; cursor: pointer; text-align: left; padding: 0; font-family: inherit; }
+    .footer-links button:hover, .footer-links a:hover { color: var(--brand-primary); text-decoration: underline; }
+    .footer-bottom { border-top: 1px solid var(--border-color); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; color: var(--text-muted); font-size: 0.825rem; }
+
+    @media (max-width: 820px) {
+      .hero-grid, .grid-3, .grid-2, .footer-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
-    }
-    @media (max-width: 768px) {
-      .branch-grid { grid-template-columns: repeat(2, 1fr); }
-      .practice-grid { grid-template-columns: repeat(2, 1fr); }
-      .job-banner { flex-direction: column; gap: 20px; text-align: center; }
-      .job-info { flex-direction: column; }
+      .hero h1 { font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <a href="#" class="brand">
-      <svg viewBox="0 0 24 24"><path d="M12 3L1 9L4 10.63V17.5C4 18.88 7.58 20 12 20C16.42 20 20 18.88 20 17.5V10.63L23 9L12 3ZM12 18C8.69 18 6 17.1 6 16.5V11.72L12 15L18 11.72V16.5C18 17.1 15.31 18 12 18ZM12 12.75L3.81 8.25L12 3.75L20.19 8.25L12 12.75Z"/></svg>
-      <div class="brand-text">
-        <span class="brand-title">NiyuktiPoints</span>
-        <span class="brand-sub">Learn • Prepare • Get Selected</span>
-      </div>
-    </a>
-    
-    <ul class="nav-links">
-      <li><button class="nav-link active">Home</button></li>
-      <li><button class="nav-link" onclick="document.getElementById('resources-sec').scrollIntoView({behavior:'smooth'})">Study Material ▾</button></li>
-      <li><button class="nav-link">Branches ▾</button></li>
-      <li><button class="nav-link" onclick="document.getElementById('practice-sec').scrollIntoView({behavior:'smooth'})">Mock Tests ▾</button></li>
-      <li><button class="nav-link" onclick="document.getElementById('notices-sec').scrollIntoView({behavior:'smooth'})">Notices</button></li>
-      <li><button class="nav-link">Technical Jobs ▾</button></li>
-    </ul>
-
-    <div class="nav-actions">
-      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/></svg>
-      </button>
-      
-      <button class="btn-google" id="btn-login" onclick="signInWithGoogle()">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 20.9 7.4 24 12 24z"/></svg>
-        Sign in with Google
-      </button>
-
-      <div id="user-pill" style="display:none; align-items:center; gap:8px;">
-        <span id="user-name" style="font-weight:600; font-size:0.85rem;"></span>
-        <button onclick="signOutUser()" style="font-size:0.8rem; color:var(--danger); background:none; text-decoration:underline;">Logout</button>
-      </div>
+  <!-- Top Verification Strip -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <span>⚡ <strong>BTEUP & JE Portal:</strong> Verified Syllabus, PYQs, and Live Recruitment Alerts</span>
+      <span>Admin Contact: <a href="mailto:princeji9305@gmail.com">princeji9305@gmail.com</a></span>
     </div>
-  </nav>
+  </div>
 
-  <div id="toast-box"></div>
+  <!-- Study Timer Strip -->
+  <div class="study-tracker-strip">
+    <div class="container" id="study-timer-display">
+      ⏱️ Study Session Timer: <span id="timer-counter">00:00:00</span> (Active session tracking enabled)
+    </div>
+  </div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container hero-content">
-      <div>
-        <div class="hero-badge">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9L4 10.63V17.5C4 18.88 7.58 20 12 20C16.42 20 20 18.88 20 17.5V10.63L23 9L12 3Z"/></svg>
-          BTEUP Diploma Learning Platform
-        </div>
-        <h1>Learn smarter.<br><span>Build your technical future.</span></h1>
-        <p>BTEUP Diploma study material, semester-wise learning and technical career opportunities — all in one place.</p>
-        <button class="btn-primary" onclick="document.getElementById('resources-sec').scrollIntoView({behavior:'smooth'})">
-          ▶ Browse Study Material ➔
+  <!-- Header -->
+  <header>
+    <div class="container nav-bar">
+      <a href="#home" class="brand" onclick="switchView('main-view')">
+        <span class="brand-mark" aria-hidden="true">NP</span>
+        <span>NiyuktiPoints</span>
+      </a>
+
+      <ul class="nav-links" role="navigation">
+        <li><button type="button" class="active" onclick="switchView('main-view'); scrollToSection('resources-sec')">Study Material</button></li>
+        <li><button type="button" onclick="switchView('main-view'); scrollToSection('mock-sec')">Mock Tests</button></li>
+        <li><button type="button" onclick="switchView('main-view'); scrollToSection('doubts-sec')">Community & Chat</button></li>
+        <li><button type="button" onclick="switchView('main-view'); scrollToSection('toppers-sec')">Toppers</button></li>
+        <li id="admin-nav-item" style="display:none;"><button type="button" onclick="switchView('admin-view')" style="color:var(--danger);font-weight:800;">Admin Panel</button></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button type="button" class="btn btn-outline" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">Dark</button>
+        
+        <!-- Google Sign-In Only -->
+        <button type="button" class="btn btn-google" id="google-login-btn" onclick="signInWithGoogle()">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
+            <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
+            <path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/>
+            <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 20.9 7.4 24 12 24z"/>
+          </svg>
+          <span>Sign in with Google</span>
         </button>
-      </div>
-      <div class="hero-graphic"></div>
-    </div>
-  </section>
 
-  <!-- Main Dashboard -->
-  <main class="container dashboard-grid">
-
-    <!-- Admin Panel (Hidden by default) -->
-    <div class="card" id="admin-panel">
-      <h3>Administrator Control Panel</h3>
-      <div class="admin-forms">
-        <form onsubmit="adminAddNotice(event)">
-          <strong>Add Notice</strong>
-          <div class="form-group"><input type="text" id="adm-notice-title" required placeholder="Notice Title"></div>
-          <div class="form-group"><input type="url" id="adm-notice-link" placeholder="URL (Optional)"></div>
-          <button type="submit" class="btn-danger">Publish</button>
-        </form>
-        <form onsubmit="adminAddResource(event)">
-          <strong>Add Resource</strong>
-          <div class="form-group"><input type="text" id="adm-res-title" required placeholder="Resource Title"></div>
-          <div class="form-group">
-            <select id="adm-res-branch">
-              <option value="Civil Engineering">Civil</option>
-              <option value="Mechanical Engineering">Mechanical</option>
-              <option value="Electrical Engineering">Electrical</option>
-              <option value="Computer Science & IT">CS & IT</option>
-              <option value="Electronics Engineering">Electronics</option>
-            </select>
+        <!-- User Logged In State -->
+        <div id="user-profile-box" style="display:none; align-items:center; gap:10px;">
+          <div class="user-chip">
+            <span id="user-name-label">Student</span>
+            <span class="coin-badge" id="user-coins-label">50 Coins</span>
           </div>
-          <div class="form-group"><input type="url" id="adm-res-url" required placeholder="PDF Link"></div>
-          <button type="submit" class="btn-danger">Save</button>
-        </form>
+          <button type="button" class="btn btn-outline" onclick="signOutUser()">Sign Out</button>
+        </div>
       </div>
     </div>
+  </header>
 
-    <!-- Col 1 -->
-    <div style="display:flex; flex-direction:column; gap:24px;">
-      
-      <!-- Explore by Branch -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
-            Explore by Branch
+  <div id="toast-box" aria-live="polite"></div>
+
+  <!-- ================= MAIN VIEW ================= -->
+  <main id="main-view" class="view-panel active">
+    
+    <!-- Hero Section with Gorgeous Visual Graphic -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="hero-badge">BTEUP • SSC JE • UPPCL JE • RRB JE Portal</span>
+          <h1>Engineered for Polytechnic Success & Technical Careers</h1>
+          <p>Access verified semester notes, syllabus PDFs, timed mock tests, and live technical recruitment updates built specifically for diploma engineers.</p>
+          <div class="hero-cta-group">
+            <a href="#resources-sec" class="btn btn-primary" onclick="scrollToSection('resources-sec')">Browse Study Material</a>
+            <span style="font-size:0.85rem; color:var(--text-muted);">Admin: princeji9305@gmail.com</span>
           </div>
         </div>
-        <p class="card-sub">Choose your engineering branch to get started</p>
-        <div class="branch-grid" style="margin-top:16px;">
-          <button class="branch-btn active" onclick="filterBranch('Civil Engineering', this)">
-            <svg viewBox="0 0 24 24"><path d="M12 2L2 12h3v8h14v-8h3L12 2zm0 2.83l5 5V18H7v-8.17l5-5z"/></svg> Civil<br>Engineering
-          </button>
-          <button class="branch-btn" onclick="filterBranch('Mechanical Engineering', this)">
-            <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg> Mechanical<br>Engineering
-          </button>
-          <button class="branch-btn" onclick="filterBranch('Electrical Engineering', this)">
-            <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg> Electrical<br>Engineering
-          </button>
-          <button class="branch-btn" onclick="filterBranch('Computer Science & IT', this)">
-            <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg> Computer Science<br>& IT
-          </button>
-          <button class="branch-btn" onclick="filterBranch('Electronics Engineering', this)">
-            <svg viewBox="0 0 24 24"><path d="M21 11V8h-2V6c0-1.1-.9-2-2-2h-2V2h-3v2h-2V2H7v2H5c-1.1 0-2 .9-2 2v2H1v3h2v2H1v3h2v2c0 1.1.9 2 2 2h2v2h3v-2h2v2h3v-2h2c1.1 0 2-.9 2-2v-2h2v-3h-2v-2h2v-3h-2zm-4 7H7V6h10v12zM9 8h6v2H9z M9 14h6v2H9z"/></svg> Electronics<br>Engineering
-          </button>
+
+        <!-- Hero Visual Illustration Card -->
+        <div class="hero-visual-card">
+          <div class="tech-graphic-box">
+            <div class="pulse-ring"></div>
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:12px; z-index:2;">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:0.85rem; font-weight:700; color:var(--brand-primary); z-index:2;">NIYUKTIPOINTS SECURE CLOUD</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); z-index:2; margin-top:4px;">Row Level Security (RLS) Active</span>
+          </div>
+          <div style="margin-top:16px; display:flex; justify-content:space-between; align-items:center; font-size:0.825rem; color:var(--text-secondary);">
+            <span>🛡️ Google OAuth 2.0</span>
+            <span style="color:var(--success); font-weight:600;">● System Online</span>
+          </div>
         </div>
       </div>
+    </section>
 
-      <!-- Learning Progress -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg>
-            Your Learning Progress
+    <!-- Notice Board Section -->
+    <section class="section" style="background: var(--bg-secondary);">
+      <div class="container">
+        <div class="notice-card">
+          <div class="notice-card-header">
+            <span><span class="status-dot"></span>Official Live Notice Board & Updates</span>
+            <span style="font-size:0.75rem; color:var(--text-muted);">Synced with Supabase DB</span>
           </div>
-          <a href="#" class="card-link">View Dashboard ➔</a>
+          <ul class="notice-list" id="notices-container">
+            <li class="notice-item"><span class="notice-date">Loading...</span><span>Connecting to verified database...</span></li>
+          </ul>
         </div>
-        <p class="card-sub">Keep going! You're doing great.</p>
-        <div class="progress-box" style="margin-top:16px;">
-          <div class="progress-thumb">∫π</div>
-          <div class="progress-info">
-            <h4>Engineering Mathematics</h4>
-            <p>12 of 18 lessons</p>
-            <div class="progress-row">
-              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 67%;"></div></div>
-              <span style="font-size:0.85rem; font-weight:700; margin-left:12px;">67%</span>
+      </div>
+    </section>
+
+    <!-- Study Resources Section -->
+    <section class="section" id="resources-sec">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Diploma Study Material & PYQs</h2>
+            <p class="section-subtitle">Filter instantly by engineering branch and semester</p>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <input type="search" id="search-resource" class="input" placeholder="Search subject..." oninput="renderResources()" style="flex:1; min-width:200px;" aria-label="Search" />
+          <select id="filter-branch" onchange="renderResources()" aria-label="Branch">
+            <option value="ALL">All Branches</option>
+            <option value="Electrical Engineering">Electrical Engineering</option>
+            <option value="Mechanical Engineering">Mechanical Engineering</option>
+            <option value="Civil Engineering">Civil Engineering</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Common / All">Common / All</option>
+          </select>
+          <select id="filter-sem" onchange="renderResources()" aria-label="Semester">
+            <option value="ALL">All Semesters</option>
+            <option value="1st Sem">1st Sem</option>
+            <option value="2nd Sem">2nd Sem</option>
+            <option value="3rd Sem">3rd Sem</option>
+            <option value="4th Sem">4th Sem</option>
+            <option value="5th Sem">5th Sem</option>
+            <option value="6th Sem">6th Sem</option>
+            <option value="JE Exam">JE Exam</option>
+          </select>
+        </div>
+
+        <div class="grid-3" id="resources-container">
+          <div class="card"><p>Loading study resources...</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mock Tests Section -->
+    <section class="section" id="mock-sec" style="background: var(--bg-secondary);">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Technical Mock Tests & Practice Sets</h2>
+            <p class="section-subtitle">Attempt timed MCQ sets for semester examinations and JE CBT</p>
+          </div>
+        </div>
+        <div class="grid-3" id="mocks-container">
+          <div class="card"><p>Loading mock tests...</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toppers Section -->
+    <section class="section" id="toppers-sec">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Hall of Fame — Polytechnic Toppers</h2>
+            <p class="section-subtitle">Celebrating academic excellence across government polytechnics</p>
+          </div>
+        </div>
+        <div class="grid-3" id="toppers-container">
+          <div class="card"><p>Loading toppers...</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Doubts & Live Chat Section -->
+    <section class="section" id="doubts-sec" style="background: var(--bg-secondary);">
+      <div class="container grid-2">
+        
+        <!-- Doubt Form & Dynamic Unlockable Badge Section -->
+        <div>
+          <h2 class="section-title" style="margin-bottom:6px;">Ask an Academic Doubt</h2>
+          <p class="section-subtitle" style="margin-bottom:16px;">Protected against spam bots. Requires Google Sign-In.</p>
+          
+          <form id="doubt-form" onsubmit="submitDoubt(event)" novalidate class="card" style="padding:20px;">
+            <input type="text" name="website_url_hp" id="doubt-hp" class="hp-field" tabindex="-1" autocomplete="off" />
+            <div class="form-group" style="margin-bottom:12px;">
+              <label for="doubt-subject" style="font-size:0.85rem; font-weight:700;">Subject / Exam Name</label>
+              <input type="text" id="doubt-subject" class="input" required maxlength="80" placeholder="e.g., Electrical Machines-II" />
             </div>
-            <div style="text-align: right; margin-top: 12px;">
-              <button class="btn-resume">Resume Learning ▶</button>
+            <div class="form-group" style="margin-bottom:16px;">
+              <label for="doubt-question" style="font-size:0.85rem; font-weight:700;">Your Question</label>
+              <textarea id="doubt-question" rows="3" required maxlength="500" placeholder="Ask your question clearly..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="doubt-submit-btn">Post Doubt</button>
+          </form>
+
+          <!-- 14+ Hours Study Unlockable Special Badge & Submission Form (Hidden until unlocked) -->
+          <div id="unlockable-badge-wrapper" style="display:none;">
+            <div class="unlocked-badge-box">
+              <h3 style="color:var(--brand-primary); margin-bottom:6px;">🏆 Elite Achiever Badge Unlocked!</h3>
+              <p id="badge-unlock-msg" style="font-size:0.875rem; margin-bottom:14px;">Congratulations! You have completed the required study hours. Claim your milestone achievement below:</p>
+              <form onsubmit="submitAchievementClaim(event)">
+                <input type="text" id="claim-note" class="input" required placeholder="Enter roll number or achievement remark..." style="margin-bottom:12px;" />
+                <button type="submit" class="btn btn-primary" style="font-size:0.85rem;">Claim Verified Badge</button>
+              </form>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Practice & Test -->
-      <div class="card" id="practice-sec">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-            Practice & Test Your Knowledge
+          <div id="locked-badge-wrapper" class="locked-badge-box">
+            <p style="font-size:0.875rem; color:var(--text-muted);">🔒 <strong>Exclusive Study Badge & Special Form:</strong> Locked. Complete the required study hours (tracked via timer) or get admin approval to unlock!</p>
           </div>
         </div>
-        <p class="card-sub">Prepare for exams with confidence</p>
-        <div class="practice-grid" style="margin-top:16px;">
-          <div class="practice-item"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM12 3c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>Mock Tests</div>
-          <div class="practice-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>Quizzes</div>
-          <div class="practice-item"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Assignments</div>
-          <div class="practice-item"><svg viewBox="0 0 24 24"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg>Your Progress</div>
-        </div>
-      </div>
 
-    </div>
+        <!-- Live Community Chat & Recent Doubts -->
+        <div>
+          <h2 class="section-title" style="margin-bottom:6px;">Live Student Discussion & Chat</h2>
+          <p class="section-subtitle" style="margin-bottom:16px;">Real-time interaction with peers & mentors</p>
+          
+          <div class="chat-box">
+            <div class="chat-messages" id="chat-messages-box">
+              <div class="chat-msg other"><strong>System:</strong> Welcome to NiyuktiPoints live chat. Keep discussions academic & professional.</div>
+            </div>
+            <div class="chat-input-area">
+              <input type="text" id="chat-input-msg" class="input" placeholder="Type message..." maxlength="250" onkeydown="if(event.key==='Enter') sendLiveChatMsg()" />
+              <button type="button" class="btn btn-primary" onclick="sendLiveChatMsg()">Send</button>
+            </div>
+          </div>
 
-    <!-- Col 2 -->
-    <div style="display:flex; flex-direction:column; gap:24px;">
-      
-      <!-- Select Semester -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
-            Select Semester
+          <div id="doubts-list-container" style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
+            <div class="card"><p>Loading discussions...</p></div>
           </div>
         </div>
-        <p class="card-sub">Access content semester-wise</p>
-        <div class="sem-grid" style="margin-top:16px;">
-          <button class="sem-btn active">1</button>
-          <button class="sem-btn">2</button>
-          <button class="sem-btn">3</button>
-          <button class="sem-btn">4</button>
-          <button class="sem-btn">5</button>
-          <button class="sem-btn">6</button>
-        </div>
-      </div>
 
-      <!-- Study Resources (Table) -->
-      <div class="card" id="resources-sec">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24"><path d="M12 3L1 9L4 10.63V17.5C4 18.88 7.58 20 12 20C16.42 20 20 18.88 20 17.5V10.63L23 9L12 3z"/></svg>
-            Study Resources
-          </div>
-        </div>
-        <p class="card-sub">Download & study material</p>
-        <table class="resource-table" style="margin-top:12px;">
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th style="text-align:center;">Notes</th>
-              <th style="text-align:center;">Video Lectures</th>
-              <th style="text-align:center;">PYQ</th>
-            </tr>
-          </thead>
-          <tbody id="resources-tbody">
-            <!-- Populated via JS -->
-            <tr><td colspan="4">Loading resources...</td></tr>
-          </tbody>
-        </table>
-        <div style="text-align:right; margin-top:12px;">
-          <a href="#" class="card-link" style="justify-content:flex-end;">View All Resources ➔</a>
-        </div>
       </div>
-
-      <!-- Ask a Doubt -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7v-2h10v2zm0-3H7V9h10v2zm0-3H7V6h10v2z"/></svg>
-            Ask a Doubt / Discussions
-          </div>
-        </div>
-        <p class="card-sub">Get help from our community</p>
-        <form class="doubt-form" onsubmit="submitDoubt(event)">
-          <input type="text" class="hp-field" id="doubt-hp" tabindex="-1">
-          <input type="text" id="doubt-input" required placeholder="Type your doubt here..." autocomplete="off">
-          <button type="submit" class="btn-doubt">Ask Doubt</button>
-        </form>
-      </div>
-
-      <!-- Latest Notices -->
-      <div class="card" id="notices-sec">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-            Latest Notices
-          </div>
-          <a href="#" class="card-link">View All Notices ➔</a>
-        </div>
-        <p class="card-sub">Stay updated with the latest information</p>
-        <div class="notice-list" id="notices-container">
-          <div class="notice-item"><span class="notice-title"><span class="dot"></span>Loading...</span></div>
-        </div>
-      </div>
-
-      <!-- Quick Links -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-            Quick Links
-          </div>
-        </div>
-        <div class="links-grid">
-          <a href="#" class="link-item">Branch-wise Study Material</a>
-          <a href="#" class="link-item">Live Classes</a>
-          <a href="#" class="link-item">Previous Year Questions</a>
-          <a href="#" class="link-item">Syllabus</a>
-          <a href="#" class="link-item">Important Questions</a>
-          <a href="#" class="link-item">About NiyuktiPoints</a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Technical Recruitment Opportunities Banner -->
-    <div class="job-banner">
-      <div class="job-info">
-        <div class="job-icon">
-          <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
-        </div>
-        <div class="job-text">
-          <h3>Technical Recruitment Opportunities</h3>
-          <p>Explore government & private job opportunities for diploma holders.</p>
-        </div>
-      </div>
-      <button class="btn-dark">View Jobs ➔</button>
-    </div>
+    </section>
 
   </main>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container footer-content">
-      <div class="brand">
-        <svg viewBox="0 0 24 24"><path d="M12 3L1 9L4 10.63V17.5C4 18.88 7.58 20 12 20C16.42 20 20 18.88 20 17.5V10.63L23 9L12 3ZM12 18C8.69 18 6 17.1 6 16.5V11.72L12 15L18 11.72V16.5C18 17.1 15.31 18 12 18ZM12 12.75L3.81 8.25L12 3.75L20.19 8.25L12 12.75Z"/></svg>
-        <div class="brand-text">
-          <span class="brand-title" style="font-size:1rem;">NiyuktiPoints</span>
-          <span class="brand-sub">Learn • Prepare • Get Selected</span>
+  <!-- ================= ADMIN PANEL VIEW ================= -->
+  <section id="admin-view" class="view-panel container section">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Administrator Control Panel</h1>
+        <p class="section-subtitle">Logged in as Admin (`princeji9305@gmail.com`). Secured via Supabase RLS.</p>
+      </div>
+      <button type="button" class="btn btn-outline" onclick="switchView('main-view')">Back to Website</button>
+    </div>
+
+    <!-- Admin Dynamic Configuration Controls -->
+    <div class="card" style="margin-bottom:24px; background:var(--bg-secondary);">
+      <h3>⚙️ Dynamic Portal Configuration (Hours & Thresholds)</h3>
+      <p style="font-size:0.875rem; color:var(--text-muted); margin-bottom:14px;">Admin can customize badge unlock study hours requirement and reward points dynamically.</p>
+      <div class="grid-2">
+        <div class="form-group">
+          <label style="font-size:0.85rem; font-weight:700;">Required Study Hours for Badge Unlock</label>
+          <input type="number" id="adm-cfg-hours" class="input" value="14" min="1" max="100" />
+        </div>
+        <div class="form-group" style="display:flex; align-items:flex-end;">
+          <button type="button" class="btn btn-primary" onclick="saveAdminConfig()">Save Portal Settings</button>
         </div>
       </div>
-      <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms & Conditions</a>
-        <a href="#">Cookie Policy</a>
-        <a href="mailto:kp.team.support@gmail.com">Contact</a>
+    </div>
+
+    <div class="grid-2">
+      <!-- Publish Notice -->
+      <div class="card">
+        <h3>Publish Official Notice</h3>
+        <form onsubmit="adminAddNotice(event)">
+          <div class="form-group" style="margin-bottom:12px;">
+            <label style="font-size:0.85rem; font-weight:700;">Headline</label>
+            <input type="text" id="adm-notice-title" class="input" required maxlength="140" placeholder="e.g., BTEUP Exam Date Released" />
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label style="font-size:0.85rem; font-weight:700;">PDF Link (Optional)</label>
+            <input type="url" id="adm-notice-link" class="input" placeholder="https://..." />
+          </div>
+          <button type="submit" class="btn btn-primary">Publish Notice</button>
+        </form>
       </div>
-      <div class="social-links">
-        <svg viewBox="0 0 24 24" onclick="toggleTheme()"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
-        <a href="#"><svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg></a>
-        <a href="https://t.me/KP_CA" target="_blank"><svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.892-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+
+      <!-- Add Study Resource -->
+      <div class="card">
+        <h3>Add Study Resource / PDF</h3>
+        <form onsubmit="adminAddResource(event)">
+          <div class="form-group" style="margin-bottom:10px;">
+            <label style="font-size:0.85rem; font-weight:700;">Title</label>
+            <input type="text" id="adm-res-title" class="input" required maxlength="120" placeholder="e.g., Electrical Machines Notes" />
+          </div>
+          <div class="form-group" style="margin-bottom:10px;">
+            <label style="font-size:0.85rem; font-weight:700;">Branch & Semester</label>
+            <div class="grid-2" style="gap:8px;">
+              <select id="adm-res-branch" required>
+                <option value="Electrical Engineering">Electrical Engg</option>
+                <option value="Mechanical Engineering">Mechanical Engg</option>
+                <option value="Civil Engineering">Civil Engg</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Common / All">Common / All</option>
+              </select>
+              <select id="adm-res-sem" required>
+                <option value="5th Sem">5th Sem</option>
+                <option value="6th Sem">6th Sem</option>
+                <option value="JE Exam">JE Exam</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label style="font-size:0.85rem; font-weight:700;">Direct URL</label>
+            <input type="url" id="adm-res-url" class="input" required placeholder="https://..." />
+          </div>
+          <button type="submit" class="btn btn-primary">Save Resource</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRIVACY POLICY VIEW ================= -->
+  <section id="privacy-view" class="view-panel container legal-doc">
+    <button type="button" class="btn btn-outline" onclick="switchView('main-view')" style="margin-bottom:20px;">← Back to Home</button>
+    <h1>Privacy Policy</h1>
+    <p><strong>Effective Date:</strong> November 16, 2026</p>
+    <p>At <strong>NiyuktiPoints</strong>, we protect your personal and academic privacy. Managed by Admin <strong>princeji9305@gmail.com</strong>.</p>
+    <h2>1. Authentication</h2>
+    <p>We use Google OAuth exclusively. We never store passwords. Row Level Security (RLS) protects all database tables.</p>
+  </section>
+
+  <!-- ================= TERMS & CONDITIONS VIEW ================= -->
+  <section id="terms-view" class="view-panel container legal-doc">
+    <button type="button" class="btn btn-outline" onclick="switchView('main-view')" style="margin-bottom:20px;">← Back to Home</button>
+    <h1>Terms and Conditions</h1>
+    <p><strong>Last Updated:</strong> November 16, 2026</p>
+    <p>All study resources and notes provided are for personal educational preparation under BTEUP guidelines.</p>
+  </section>
+
+  <!-- Cookie Consent -->
+  <aside class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Cookie Consent">
+    <p>We use essential local storage to manage your Google sign-in session and study timer. Read our <a href="#privacy" onclick="switchView('privacy-view')">Privacy Policy</a>.</p>
+    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px;">
+      <button type="button" class="btn btn-outline" onclick="acceptCookies('essential')">Essential Only</button>
+      <button type="button" class="btn btn-primary" onclick="acceptCookies('all')">Accept</button>
+    </div>
+  </aside>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="margin-bottom:10px;">
+            <span class="brand-mark">NP</span>
+            <span>NiyuktiPoints</span>
+          </div>
+          <p style="max-width:42ch; margin-bottom:10px;">Educational and technical recruitment portal for Polytechnic Diploma students in India.</p>
+          <p>Admin Contact: <a href="mailto:princeji9305@gmail.com">princeji9305@gmail.com</a></p>
+        </div>
+        <div>
+          <strong style="display:block; margin-bottom:12px; color:var(--text-primary);">Quick Links</strong>
+          <ul class="footer-links">
+            <li><button type="button" onclick="switchView('main-view'); scrollToSection('resources-sec')">Study Notes</button></li>
+            <li><button type="button" onclick="switchView('main-view'); scrollToSection('mock-sec')">Mock Tests</button></li>
+            <li><button type="button" onclick="switchView('main-view'); scrollToSection('doubts-sec')">Student Forum</button></li>
+          </ul>
+        </div>
+        <div>
+          <strong style="display:block; margin-bottom:12px; color:var(--text-primary);">Legal</strong>
+          <ul class="footer-links">
+            <li><button type="button" onclick="switchView('privacy-view')">Privacy Policy</button></li>
+            <li><button type="button" onclick="switchView('terms-view')">Terms & Conditions</button></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 NiyuktiPoints. All rights reserved.</span>
+        <span>Secured with Supabase RLS & Google OAuth 2.0</span>
       </div>
     </div>
   </footer>
 
-  <!-- Application Logic (Supabase + Data) -->
+  <!-- ================= APPLICATION LOGIC ================= -->
   <script>
-    // Configuration
     const SUPABASE_URL = 'https://tcezxjtyihyuorslkqif.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xRGhaPLQesDYElQjvXPluQ_BT9aGl6r';
-    const ADMIN_EMAIL = 'kp.team.support@gmail.com';
+    const ADMIN_EMAIL = 'princeji9305@gmail.com';
+
     let sbClient = null;
     let currentUser = null;
+    let currentProfile = null;
     let allResources = [];
-    let activeBranch = 'Civil Engineering'; // Default
+    let lastSubmitTime = 0;
 
-    // Initialization
-    window.addEventListener('DOMContentLoaded', async () => {
-      initTheme();
-      if (window.supabase) {
-        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const { data: { session } } = await sbClient.auth.getSession();
-        if (session) await handleAuth(session.user);
-        
-        sbClient.auth.onAuthStateChange((_e, session) => {
-          handleAuth(session ? session.user : null);
-        });
-        await loadData();
-      }
-    });
+    let studySeconds = parseInt(localStorage.getItem('np_study_secs') || '0', 10);
+    let targetStudyHours = 14;
 
-    // Theme Toggle
+    function escapeHTML(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function sanitizeURL(url) {
+      if (!url) return '#';
+      try {
+        const parsed = new URL(url, window.location.origin);
+        return (parsed.protocol === 'http:' || parsed.protocol === 'https:') ? parsed.href : '#';
+      } catch (e) { return '#'; }
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById('toast-box');
+      const item = document.createElement('div');
+      item.className = 'toast';
+      item.textContent = msg;
+      box.appendChild(item);
+      setTimeout(() => item.remove(), 3500);
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(viewId);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToSection(secId) {
+      const el = document.getElementById(secId);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
     function initTheme() {
       const saved = localStorage.getItem('np_theme') || 'light';
       document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('theme-toggle').textContent = saved === 'dark' ? 'Light' : 'Dark';
     }
+
     function toggleTheme() {
       const current = document.documentElement.getAttribute('data-theme');
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('np_theme', next);
+      document.getElementById('theme-toggle').textContent = next === 'dark' ? 'Light' : 'Dark';
     }
 
-    // UI Helpers
-    function showToast(msg) {
-      const box = document.getElementById('toast-box');
-      const el = document.createElement('div');
-      el.className = 'toast'; el.textContent = msg;
-      box.appendChild(el);
-      setTimeout(() => el.remove(), 3000);
-    }
-    function escapeHTML(str) {
-      if(!str) return '';
-      return String(str).replace(/[&<>'"]/g, tag => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[tag]));
+    function initCookieBanner() {
+      if (!localStorage.getItem('np_cookie_consent')) {
+        document.getElementById('cookie-banner').style.display = 'block';
+      }
     }
 
-    // Authentication
-    async function signInWithGoogle() {
-      if(!sbClient) return;
-      const { error } = await sbClient.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
-      if(error) showToast(error.message);
+    function acceptCookies(level) {
+      localStorage.setItem('np_cookie_consent', level);
+      document.getElementById('cookie-banner').style.display = 'none';
     }
-    async function signOutUser() {
-      await sbClient.auth.signOut();
-      showToast('Signed out successfully');
-    }
-    async function handleAuth(user) {
-      currentUser = user;
-      const btnLogin = document.getElementById('btn-login');
-      const userPill = document.getElementById('user-pill');
-      const adminPanel = document.getElementById('admin-panel');
-      
-      if(user) {
-        btnLogin.style.display = 'none';
-        userPill.style.display = 'flex';
-        const name = user.user_metadata?.full_name || user.email.split('@')[0];
-        document.getElementById('user-name').textContent = escapeHTML(name);
-        if(user.email.toLowerCase() === ADMIN_EMAIL) adminPanel.style.display = 'block';
+
+    // Study Timer Engine
+    setInterval(() => {
+      studySeconds++;
+      localStorage.setItem('np_study_secs', studySeconds);
+      const hrs = String(Math.floor(studySeconds / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((studySeconds % 3600) / 60)).padStart(2, '0');
+      const secs = String(studySeconds % 60).padStart(2, '0');
+      const timerEl = document.getElementById('timer-counter');
+      if (timerEl) timerEl.textContent = `${hrs}:${mins}:${secs}`;
+
+      checkBadgeUnlockStatus();
+    }, 1000);
+
+    function checkBadgeUnlockStatus() {
+      const wrapperLocked = document.getElementById('locked-badge-wrapper');
+      const wrapperUnlocked = document.getElementById('unlockable-badge-wrapper');
+      if (!wrapperLocked || !wrapperUnlocked) return;
+
+      const currentHours = studySeconds / 3600;
+      const isAdmin = currentUser && currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL;
+      const isUnlocked = currentHours >= targetStudyHours || (currentProfile && currentProfile.badges && currentProfile.badges.unlocked) || isAdmin;
+
+      if (isUnlocked) {
+        wrapperLocked.style.display = 'none';
+        wrapperUnlocked.style.display = 'block';
       } else {
-        btnLogin.style.display = 'flex';
-        userPill.style.display = 'none';
-        adminPanel.style.display = 'none';
+        wrapperLocked.style.display = 'block';
+        wrapperUnlocked.style.display = 'none';
       }
     }
 
-    // Data Loading & Filtering
-    async function loadData() {
-      // Fetch Notices
-      const { data: notices } = await sbClient.from('notices').select('*').order('created_at', { ascending: false }).limit(4);
-      const nc = document.getElementById('notices-container');
-      if(notices && notices.length) {
-        nc.innerHTML = notices.map(n => `
-          <div class="notice-item">
-            <span class="notice-title"><span class="dot"></span>${escapeHTML(n.title)}</span>
-            <span class="notice-date">${new Date(n.created_at).toLocaleDateString('en-IN', {month:'short', day:'numeric', year:'numeric'})}</span>
-          </div>`).join('');
-      }
-
-      // Fetch Resources
-      const { data: res } = await sbClient.from('resources').select('*').order('created_at', { ascending: false });
-      if(res) allResources = res;
-      renderResources();
-    }
-
-    function filterBranch(branch, btnEl) {
-      activeBranch = branch;
-      document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('active'));
-      btnEl.classList.add('active');
-      renderResources();
-    }
-
-    function renderResources() {
-      const tb = document.getElementById('resources-tbody');
-      const filtered = allResources.length ? allResources.filter(r => r.branch === activeBranch || r.branch === 'Common / All') : [
-        { title: 'Engineering Mathematics', url: '#' },
-        { title: 'Basic Electrical Engineering', url: '#' },
-        { title: 'Machine Design', url: '#' }
-      ]; // Fallback data to match design strictly if DB is empty
-      
-      if(!filtered.length) {
-        tb.innerHTML = '<tr><td colspan="4" style="text-align:center;">No resources found for this branch.</td></tr>';
+    // Google OAuth
+    async function signInWithGoogle() {
+      if (!sbClient) {
+        showToast('Database connection initializing...');
         return;
       }
-      
-      tb.innerHTML = filtered.map(r => `
-        <tr>
-          <td>${escapeHTML(r.title)}</td>
-          <td style="text-align:center;"><a href="${escapeHTML(r.url || '#')}" class="icon-btn" target="_blank"><svg width="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a></td>
-          <td style="text-align:center;"><a href="#" class="icon-btn"><svg width="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></a></td>
-          <td style="text-align:center;"><a href="#" class="icon-btn"><svg width="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></a></td>
-        </tr>
+      const { error } = await sbClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin }
+      });
+      if (error) showToast('Google Sign-In error: ' + error.message);
+    }
+
+    async function signOutUser() {
+      if (!sbClient) return;
+      await sbClient.auth.signOut();
+      currentUser = null;
+      currentProfile = null;
+      updateAuthUI();
+      switchView('main-view');
+      showToast('Signed out safely.');
+    }
+
+    async function loadUserProfile(user) {
+      if (!user || !sbClient) return;
+      const { data, error } = await sbClient.from('profiles').select('*').eq('id', user.id).maybeSingle();
+      if (!error && data) {
+        if (data.banned_until && new Date(data.banned_until) > new Date()) {
+          showToast('Account restricted.');
+          await sbClient.auth.signOut();
+          return;
+        }
+        currentProfile = data;
+      }
+      updateAuthUI();
+      checkBadgeUnlockStatus();
+    }
+
+    function updateAuthUI() {
+      const loginBtn = document.getElementById('google-login-btn');
+      const profileBox = document.getElementById('user-profile-box');
+      const adminNav = document.getElementById('admin-nav-item');
+
+      if (currentUser) {
+        loginBtn.style.display = 'none';
+        profileBox.style.display = 'inline-flex';
+        const name = (currentProfile && currentProfile.full_name) || currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+        const coins = (currentProfile && typeof currentProfile.coins === 'number') ? currentProfile.coins : 50;
+        document.getElementById('user-name-label').textContent = name;
+        document.getElementById('user-coins-label').textContent = coins + ' Coins';
+
+        const isAdmin = (currentProfile && currentProfile.is_admin === true) || (currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL);
+        adminNav.style.display = isAdmin ? 'block' : 'none';
+      } else {
+        loginBtn.style.display = 'inline-flex';
+        profileBox.style.display = 'none';
+        adminNav.style.display = 'none';
+      }
+    }
+
+    // Data Fetching
+    async function loadPublicData() {
+      if (!sbClient) return;
+
+      const { data: notices } = await sbClient.from('notices').select('*').order('created_at', { ascending: false }).limit(6);
+      renderNotices(notices || []);
+
+      const { data: resources } = await sbClient.from('resources').select('*').order('created_at', { ascending: false });
+      allResources = resources || [];
+      renderResources();
+
+      const { data: mocks } = await sbClient.from('mock_tests').select('*').order('created_at', { ascending: false }).limit(6);
+      renderMocks(mocks || []);
+
+      const { data: toppers } = await sbClient.from('toppers').select('*').order('created_at', { ascending: false }).limit(6);
+      renderToppers(toppers || []);
+
+      const { data: doubts } = await sbClient.from('doubts').select('*').order('created_at', { ascending: false }).limit(6);
+      renderDoubts(doubts || []);
+
+      const { data: settings } = await sbClient.from('site_settings').select('*').maybeSingle();
+      if (settings && settings.study_hours_target) {
+        targetStudyHours = settings.study_hours_target;
+        const cfgInput = document.getElementById('adm-cfg-hours');
+        if (cfgInput) cfgInput.value = targetStudyHours;
+      }
+    }
+
+    function renderNotices(list) {
+      const container = document.getElementById('notices-container');
+      if (!list.length) {
+        container.innerHTML = `<li class="notice-item"><span class="notice-date">Official Update</span><span>BTEUP Semester Syllabus & Exam Pattern PDFs updated for 2026-27.</span></li>`;
+        return;
+      }
+      container.innerHTML = list.map(item => `
+        <li class="notice-item">
+          <span class="notice-date">${escapeHTML(new Date(item.created_at).toLocaleDateString('en-IN'))}</span>
+          <span>${escapeHTML(item.title || item.content)} ${item.link ? `<a href="${sanitizeURL(item.link)}" target="_blank" rel="noopener noreferrer">View →</a>` : ''}</span>
+        </li>
       `).join('');
     }
 
-    // Submit Doubt
-    async function submitDoubt(e) {
-      e.preventDefault();
-      if(document.getElementById('doubt-hp').value) return; // Spam check
-      if(!currentUser) return showToast('Please Sign in with Google first.');
-      
-      const val = document.getElementById('doubt-input').value.trim();
-      if(val.length < 10) return showToast('Please write a clear doubt (min 10 chars).');
-      
-      const { error } = await sbClient.from('doubts').insert([{ question: val, subject: 'General', user_id: currentUser.id }]);
-      if(error) showToast('Error: ' + error.message);
-      else { e.target.reset(); showToast('Doubt submitted successfully!'); }
+    function renderResources() {
+      const container = document.getElementById('resources-container');
+      const query = (document.getElementById('search-resource').value || '').toLowerCase().trim();
+      const branch = document.getElementById('filter-branch').value;
+      const sem = document.getElementById('filter-sem').value;
+
+      const source = allResources.length ? allResources : [
+        { title: 'Electrical Machines & Power Systems Complete Notes', branch: 'Electrical Engineering', semester: '5th Sem', url: '#' },
+        { title: 'BTEUP Applied Mathematics PYQ Solved', branch: 'Common / All', semester: '2nd Sem', url: '#' }
+      ];
+
+      const filtered = source.filter(r => {
+        const matchQ = !query || (r.title || '').toLowerCase().includes(query);
+        const matchB = branch === 'ALL' || (r.branch || 'Common / All') === branch;
+        const matchS = sem === 'ALL' || (r.semester || '5th Sem') === sem;
+        return matchQ && matchB && matchS;
+      });
+
+      if (!filtered.length) {
+        container.innerHTML = `<div class="card"><p>No matching resources found.</p></div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(r => `
+        <article class="card">
+          <div>
+            <div class="card-meta" style="margin-bottom:10px;">
+              <span class="tag">${escapeHTML(r.branch || 'Diploma')}</span>
+              <span class="tag">${escapeHTML(r.semester || 'Notes')}</span>
+            </div>
+            <h3>${escapeHTML(r.title)}</h3>
+          </div>
+          <a href="${sanitizeURL(r.url || r.file_url)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width:100%;">Access PDF / Notes</a>
+        </article>
+      `).join('');
     }
 
-    // Admin Add
+    function renderMocks(list) {
+      const container = document.getElementById('mocks-container');
+      const source = list.length ? list : [
+        { title: 'SSC JE & RRB JE Technical CBT-1 Practice Set 01', branch: 'Electrical Engineering', duration: '60 Mins' }
+      ];
+      container.innerHTML = source.map(m => `
+        <article class="card">
+          <div>
+            <div class="card-meta" style="margin-bottom:10px;"><span class="tag">${escapeHTML(m.branch || 'Technical')}</span><span>${escapeHTML(m.duration || '45 Mins')}</span></div>
+            <h3>${escapeHTML(m.title)}</h3>
+          </div>
+          <button type="button" class="btn btn-outline" onclick="showToast('Opening test environment...')">Start Practice Set</button>
+        </article>
+      `).join('');
+    }
+
+    function renderToppers(list) {
+      const container = document.getElementById('toppers-container');
+      if (!list.length) {
+        container.innerHTML = `<div class="card"><p>Polytechnic Toppers list will be updated soon.</p></div>`;
+        return;
+      }
+      container.innerHTML = list.map(t => `
+        <article class="card">
+          <div>
+            <div class="card-meta"><span class="tag">Rank #${escapeHTML(t.rank || '1')}</span><span>${escapeHTML(t.branch || 'Engineering')}</span></div>
+            <h3>${escapeHTML(t.name || 'Student')}</h3>
+            <p>${escapeHTML(t.college || 'Government Polytechnic')}</p>
+          </div>
+          <span style="font-family:'JetBrains Mono'; font-weight:800; color:var(--success); font-size:1.1rem;">${escapeHTML(t.score || '92%')}</span>
+        </article>
+      `).join('');
+    }
+
+    function renderDoubts(list) {
+      const container = document.getElementById('doubts-list-container');
+      if (!list.length) {
+        container.innerHTML = `<div class="card"><p>No doubts posted yet. Start the discussion!</p></div>`;
+        return;
+      }
+      container.innerHTML = list.map(d => `
+        <div class="card" style="padding:16px;">
+          <div class="card-meta"><span class="tag">${escapeHTML(d.subject || 'Doubt')}</span></div>
+          <p style="font-size:0.9rem;">${escapeHTML(d.question || d.content)}</p>
+        </div>
+      `).join('');
+    }
+
+    // Forms & Chat
+    async function submitDoubt(e) {
+      e.preventDefault();
+      if (document.getElementById('doubt-hp').value) return;
+      if (!currentUser) {
+        showToast('Please Sign in with Google first.');
+        return;
+      }
+      const subject = document.getElementById('doubt-subject').value.trim();
+      const question = document.getElementById('doubt-question').value.trim();
+      if (subject.length < 3 || question.length < 10) {
+        showToast('Please enter a valid subject and question.');
+        return;
+      }
+
+      const { error } = await sbClient.from('doubts').insert([{ subject, question, user_id: currentUser.id }]);
+      if (error) showToast('Error: ' + error.message);
+      else {
+        document.getElementById('doubt-form').reset();
+        showToast('Doubt posted successfully!');
+        loadPublicData();
+      }
+    }
+
+    async function submitAchievementClaim(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+      const note = document.getElementById('claim-note').value.trim();
+      const { error } = await sbClient.from('submissions').insert([{ user_id: currentUser.id, notes: note, status: 'claimed' }]);
+      if (error) showToast('Error: ' + error.message);
+      else {
+        showToast('Achievement badge claimed successfully!');
+        document.getElementById('unlockable-badge-wrapper').style.display = 'none';
+      }
+    }
+
+    function sendLiveChatMsg() {
+      const input = document.getElementById('chat-input-msg');
+      const text = input.value.trim();
+      if (!text) return;
+      if (!currentUser) {
+        showToast('Please sign in with Google to chat.');
+        return;
+      }
+      const box = document.getElementById('chat-messages-box');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'chat-msg self';
+      msgDiv.innerHTML = `<strong>You:</strong> ${escapeHTML(text)}`;
+      box.appendChild(msgDiv);
+      input.value = '';
+      box.scrollTop = box.scrollHeight;
+      showToast('Message sent to community.');
+    }
+
+    // Admin Actions
+    async function saveAdminConfig() {
+      const hours = parseInt(document.getElementById('adm-cfg-hours').value, 10);
+      if (isNaN(hours)) return;
+      const { error } = await sbClient.from('site_settings').upsert({ id: 1, study_hours_target: hours });
+      if (error) showToast('Error updating settings: ' + error.message);
+      else {
+        targetStudyHours = hours;
+        showToast('Portal configuration saved successfully!');
+      }
+    }
+
     async function adminAddNotice(e) {
       e.preventDefault();
-      const title = document.getElementById('adm-notice-title').value;
-      const link = document.getElementById('adm-notice-link').value;
+      const title = document.getElementById('adm-notice-title').value.trim();
+      const link = document.getElementById('adm-notice-link').value.trim();
       const { error } = await sbClient.from('notices').insert([{ title, link }]);
-      if(!error) { showToast('Notice added'); e.target.reset(); loadData(); }
+      if (error) showToast('Error: ' + error.message);
+      else {
+        e.target.reset();
+        showToast('Notice published!');
+        loadPublicData();
+      }
     }
+
     async function adminAddResource(e) {
       e.preventDefault();
-      const title = document.getElementById('adm-res-title').value;
+      const title = document.getElementById('adm-res-title').value.trim();
       const branch = document.getElementById('adm-res-branch').value;
-      const url = document.getElementById('adm-res-url').value;
-      const { error } = await sbClient.from('resources').insert([{ title, branch, semester: '1st Sem', url }]);
-      if(!error) { showToast('Resource added'); e.target.reset(); loadData(); }
+      const semester = document.getElementById('adm-res-sem').value;
+      const url = document.getElementById('adm-res-url').value.trim();
+      const { error } = await sbClient.from('resources').insert([{ title, branch, semester, url }]);
+      if (error) showToast('Error: ' + error.message);
+      else {
+        e.target.reset();
+        showToast('Resource added!');
+        loadPublicData();
+      }
     }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      initTheme();
+      initCookieBanner();
+      renderNotices([]);
+      renderResources();
+      renderMocks([]);
+      renderToppers([]);
+      renderDoubts([]);
+
+      if (window.supabase && SUPABASE_ANON_KEY) {
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data: { session } } = await sbClient.auth.getSession();
+        if (session && session.user) {
+          currentUser = session.user;
+          await loadUserProfile(currentUser);
+        }
+        sbClient.auth.onAuthStateChange(async (_event, session) => {
+          currentUser = session ? session.user : null;
+          if (currentUser) await loadUserProfile(currentUser);
+          else updateAuthUI();
+        });
+        await loadPublicData();
+      }
+    });
   </script>
 </body>
 </html>
