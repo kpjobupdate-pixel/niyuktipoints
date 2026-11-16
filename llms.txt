@@ -1,0 +1,13 @@
+# NiyuktiPoints
+
+> Official educational resource and technical recruitment update portal for Polytechnic Diploma Engineering (BTEUP) and Junior Engineer (SSC JE, UPPCL JE, RRB JE) aspirants.
+
+## Core Offerings
+- **BTEUP Study Material:** Branch-wise and semester-wise syllabus PDFs, handwritten notes, and previous year question papers (Electrical, Mechanical, Civil, CS).
+- **Technical Mock Tests:** Subject-wise MCQ practice sets for diploma semester exams and JE CBT preparation.
+- **Official Notice Board:** Verified alerts on polytechnic exam schedules, scholarship notices, and technical government job notifications.
+
+## Contact & Verification
+- **Portal URL:** https://niyuktipoints.vercel.app/
+- **Support Email:** kp.team.support@gmail.com
+- **Telegram Community:** https://t.me/KP_CA
