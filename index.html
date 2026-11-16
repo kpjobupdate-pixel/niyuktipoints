@@ -1,761 +1,761 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" class="scroll-smooth">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NiyuktiPoints — BTEUP Diploma Learning Platform</title>
-  <meta name="description" content="A complete Diploma Learning Platform for BTEUP Students. Study Smart, Achieve Big!" />
+  <title>NiyuktiPoints — Diploma Study Material & Technical Jobs</title>
+  <meta name="description" content="Official BTEUP Diploma study material, semester-wise learning, and technical career opportunities — all in one place." />
+  <meta name="robots" content="index, follow" />
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-              900: '#1e3a8a',
-            },
-            dark: '#0f172a'
-          }
-        }
-      }
-    }
-  </script>
 
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-    .dark body { background-color: #0f172a; color: #f1f5f9; }
-    
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #f1f1f1; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    
-    .glass-panel {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+    /* CSS Variables matching exactly to Image 2 (1000095815.png) */
+    :root {
+      --bg-body: #f4f7f9;
+      --bg-surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --primary: #0f4c81; /* Deep Professional Blue */
+      --primary-hover: #0c3e6a;
+      --accent: #1668e3; /* Bright Blue for CTA */
+      --accent-hover: #1255ba;
+      --hero-bg: #eaf1fa;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --nav-height: 72px;
     }
+
+    [data-theme="dark"] {
+      --bg-body: #0b1120;
+      --bg-surface: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-light: #64748b;
+      --primary: #38bdf8;
+      --hero-bg: #0f172a;
+      --border: #334155;
+      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: 0.2s; }
+    a:hover { text-decoration: underline; }
+    ul { list-style: none; }
+    button { font-family: inherit; border: none; cursor: pointer; transition: 0.2s; }
+    input, select { font-family: inherit; }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+    /* --- Navbar --- */
+    .navbar {
+      background: var(--bg-surface);
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none !important; }
+    .brand svg { width: 36px; height: 36px; fill: var(--text-main); }
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-title { font-weight: 800; font-size: 1.25rem; color: var(--text-main); line-height: 1.1; }
+    .brand-sub { font-size: 0.65rem; color: var(--text-muted); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-link { 
+      font-size: 0.9rem; font-weight: 600; color: var(--text-main); 
+      display: flex; align-items: center; gap: 4px; background: none; 
+    }
+    .nav-link.active { background: var(--primary); color: white; padding: 6px 14px; border-radius: 20px; }
+    .nav-link:hover:not(.active) { color: var(--accent); }
     
-    .hero-bg {
-      background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+    .nav-actions { display: flex; align-items: center; gap: 16px; }
+    .theme-toggle { background: var(--bg-body); width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: var(--text-main); border: 1px solid var(--border); }
+    .btn-google {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      padding: 8px 16px; border-radius: 24px; font-weight: 600; font-size: 0.875rem; color: var(--text-main);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .btn-google:hover { background: var(--bg-body); }
+    
+    /* --- Hero Section --- */
+    .hero {
+      background-color: var(--hero-bg);
+      background-image: radial-gradient(var(--border) 1px, transparent 1px);
+      background-size: 24px 24px;
+      padding: 60px 0;
+      border-bottom: 1px solid var(--border);
       position: relative;
       overflow: hidden;
     }
-    .hero-bg::before {
-      content: '';
-      position: absolute;
-      top: 0; right: 0; bottom: 0; left: 0;
-      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-      background-size: 24px 24px;
-      opacity: 0.3;
-      z-index: 0;
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
     }
-    .dark .hero-bg { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
-    .dark .hero-bg::before { background-image: radial-gradient(#334155 1px, transparent 1px); }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.8); border: 1px solid var(--border);
+      padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--primary);
+      margin-bottom: 20px; backdrop-filter: blur(4px);
+    }
+    .hero h1 { font-size: 3.5rem; font-weight: 800; color: var(--primary); line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.02em; }
+    .hero h1 span { color: var(--text-main); }
+    .hero p { font-size: 1.125rem; color: var(--text-muted); font-weight: 500; max-width: 500px; margin-bottom: 32px; line-height: 1.6; }
+    
+    .btn-primary {
+      background: var(--accent); color: white;
+      padding: 12px 24px; border-radius: 30px; font-size: 1rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(22, 104, 227, 0.3);
+    }
+    .btn-primary:hover { background: var(--accent-hover); text-decoration: none; transform: translateY(-1px); }
 
-    .marquee-container {
-      overflow: hidden;
-      white-space: nowrap;
+    .hero-graphic {
+      width: 100%; height: 100%; min-height: 350px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400'%3E%3Cpath d='M100 350 L500 350 L450 150 L150 150 Z' fill='none' stroke='%23cbd5e1' stroke-width='2'/%3E%3Ccircle cx='300' cy='200' r='80' fill='none' stroke='%2338bdf8' stroke-width='4' stroke-dasharray='10 5'/%3E%3Cpath d='M250 250 L350 150 M350 250 L250 150' stroke='%23cbd5e1' stroke-width='2'/%3E%3Ccircle cx='300' cy='200' r='20' fill='%23f59e0b'/%3E%3Crect x='200' y='280' width='200' height='40' fill='%230f4c81' rx='4'/%3E%3C/svg%3E") center/contain no-repeat;
     }
-    .marquee-content {
-      display: inline-block;
-      animation: marquee 20s linear infinite;
+
+    /* --- Main Dashboard Grid --- */
+    .dashboard-grid {
+      padding: 40px 0;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
     }
-    @keyframes marquee {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
+    
+    .card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .card-title { display: flex; align-items: center; gap: 10px; font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
+    .card-title svg { width: 24px; height: 24px; fill: var(--accent); }
+    .card-sub { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; margin-top: -12px; margin-left: 34px; }
+    .card-link { font-size: 0.85rem; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 4px; }
+
+    /* Explore by Branch */
+    .branch-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .branch-btn {
+      background: var(--bg-body); border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-align: center;
+    }
+    .branch-btn svg { width: 28px; height: 28px; fill: currentColor; }
+    .branch-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .branch-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+    /* Select Semester */
+    .sem-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+    .sem-btn {
+      aspect-ratio: 1; background: var(--bg-body); border: 1px solid var(--border);
+      border-radius: var(--radius-md); display: grid; place-items: center;
+      font-size: 1.25rem; font-weight: 700; color: var(--text-main);
+    }
+    .sem-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+    .sem-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+    /* Learning Progress */
+    .progress-box { display: flex; gap: 20px; align-items: center; }
+    .progress-thumb {
+      width: 120px; height: 90px; background: #0f172a; border-radius: var(--radius-md);
+      display: grid; place-items: center; color: rgba(255,255,255,0.3); font-family: 'Times New Roman', serif; font-size: 2rem; font-style: italic;
+    }
+    .progress-info { flex: 1; }
+    .progress-info h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .progress-info p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
+    .progress-bar-bg { width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; display: flex; align-items: center; }
+    .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+    .progress-row { display: flex; justify-content: space-between; align-items: center; }
+    .btn-resume { background: var(--accent); color: white; padding: 6px 14px; border-radius: 16px; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+
+    /* Study Resources Table */
+    .resource-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .resource-table th { text-align: left; padding: 12px 8px; font-size: 0.85rem; color: var(--text-main); font-weight: 700; border-bottom: 1px solid var(--border); }
+    .resource-table td { padding: 12px 8px; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+    .resource-table tr:last-child td { border-bottom: none; }
+    .icon-btn { color: var(--accent); background: var(--hero-bg); width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+    .icon-btn:hover { background: var(--accent); color: white; }
+
+    /* Practice Grid */
+    .practice-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .practice-item {
+      background: var(--bg-body); border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-size: 0.85rem; font-weight: 600; color: var(--text-main); text-align: center;
+    }
+    .practice-item svg { width: 28px; height: 28px; fill: var(--primary); }
+
+    /* Ask a Doubt */
+    .doubt-form { display: flex; gap: 12px; align-items: center; background: var(--bg-body); border: 1px solid var(--border); padding: 6px; border-radius: 30px; margin-top: 8px; }
+    .doubt-form input { flex: 1; background: transparent; border: none; padding: 10px 16px; font-size: 0.95rem; outline: none; color: var(--text-main); }
+    .doubt-form input::placeholder { color: var(--text-light); }
+    .btn-doubt { background: var(--primary); color: white; padding: 10px 24px; border-radius: 24px; font-weight: 600; font-size: 0.9rem; }
+    .hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
+
+    /* Notices */
+    .notice-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+    .notice-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px dashed var(--border); }
+    .notice-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .notice-title { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 500; color: var(--text-main); }
+    .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+    .notice-date { font-size: 0.8rem; color: var(--text-muted); font-family: monospace; }
+
+    /* Quick Links */
+    .links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+    .link-item { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+    .link-item::before { content: "›"; color: var(--accent); font-size: 1.2rem; font-weight: bold; }
+    
+    /* Recruitment Banner */
+    .job-banner {
+      grid-column: 1 / -1;
+      background: linear-gradient(90deg, #eaf1fa 0%, #ffffff 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .job-info { display: flex; align-items: center; gap: 20px; }
+    .job-icon { width: 48px; height: 48px; background: var(--primary); border-radius: 12px; display: grid; place-items: center; }
+    .job-icon svg { width: 24px; height: 24px; fill: white; }
+    .job-text h3 { font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .job-text p { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+    .btn-dark { background: var(--primary); color: white; padding: 10px 24px; border-radius: 24px; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;}
+    
+    /* Footer */
+    footer { background: var(--bg-surface); padding: 32px 0; border-top: 1px solid var(--border); }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
+    .social-links { display: flex; gap: 16px; align-items: center; }
+    .social-links svg { width: 20px; height: 20px; fill: var(--text-muted); transition: 0.2s; cursor: pointer; }
+    .social-links svg:hover { fill: var(--accent); }
+
+    /* Admin Panel Addon */
+    #admin-panel { display: none; grid-column: 1 / -1; background: #fff1f2; border: 1px solid #fecdd3; }
+    #admin-panel h3 { color: var(--danger); margin-bottom: 16px; }
+    .admin-forms { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .form-group input, .form-group select { padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.85rem; }
+    .btn-danger { background: var(--danger); color: white; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; }
+
+    /* Utilities */
+    #toast-box { position: fixed; top: 90px; right: 24px; z-index: 200; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: var(--text-main); color: var(--bg-surface); padding: 12px 20px; border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; box-shadow: var(--shadow-hover); }
+    
+    @media (max-width: 992px) {
+      .hero-content, .dashboard-grid { grid-template-columns: 1fr; }
+      .hero-graphic { display: none; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 768px) {
+      .branch-grid { grid-template-columns: repeat(2, 1fr); }
+      .practice-grid { grid-template-columns: repeat(2, 1fr); }
+      .job-banner { flex-direction: column; gap: 20px; text-align: center; }
+      .job-info { flex-direction: column; }
     }
   </style>
 </head>
-<body class="text-slate-800 antialiased transition-colors duration-200">
+<body>
 
-  <!-- 1. TOP BAR -->
-  <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 flex justify-between items-center z-50 relative">
-    <div class="flex items-center gap-2 overflow-hidden w-1/2">
-      <span class="text-yellow-400"><i class="fa-solid fa-bullhorn"></i></span>
-      <div class="marquee-container w-full">
-        <div class="marquee-content font-medium">Latest: BTEUP Exam 2026 – Important Notice Released! Download PDF Now.</div>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="#" class="brand">
+      <svg viewBox="0 0 24 24"><path d="M12 3L1 9L4 10.63V17.5C4 18.88 7.58 20 12 20C16.42 20 20 18.88 20 17.5V10.63L23 9L12 3ZM12 18C8.69 18 6 17.1 6 16.5V11.72L12 15L18 11.72V16.5C18 17.1 15.31 18 12 18ZM12 12.75L3.81 8.25L12 3.75L20.19 8.25L12 12.75Z"/></svg>
+      <div class="brand-text">
+        <span class="brand-title">NiyuktiPoints</span>
+        <span class="brand-sub">Learn • Prepare • Get Selected</span>
+      </div>
+    </a>
+    
+    <ul class="nav-links">
+      <li><button class="nav-link active">Home</button></li>
+      <li><button class="nav-link" onclick="document.getElementById('resources-sec').scrollIntoView({behavior:'smooth'})">Study Material ▾</button></li>
+      <li><button class="nav-link">Branches ▾</button></li>
+      <li><button class="nav-link" onclick="document.getElementById('practice-sec').scrollIntoView({behavior:'smooth'})">Mock Tests ▾</button></li>
+      <li><button class="nav-link" onclick="document.getElementById('notices-sec').scrollIntoView({behavior:'smooth'})">Notices</button></li>
+      <li><button class="nav-link">Technical Jobs ▾</button></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/></svg>
+      </button>
+      
+      <button class="btn-google" id="btn-login" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 20.9 7.4 24 12 24z"/></svg>
+        Sign in with Google
+      </button>
+
+      <div id="user-pill" style="display:none; align-items:center; gap:8px;">
+        <span id="user-name" style="font-weight:600; font-size:0.85rem;"></span>
+        <button onclick="signOutUser()" style="font-size:0.8rem; color:var(--danger); background:none; text-decoration:underline;">Logout</button>
       </div>
     </div>
-    <div class="flex items-center gap-6">
-      <span class="hidden sm:inline"><i class="fa-solid fa-phone mr-1"></i> Help: +91-9876543210</span>
-      <span class="hidden sm:inline"><i class="fa-solid fa-envelope mr-1"></i> support@niyuktipoints.in</span>
-      <div class="flex gap-3 text-slate-400">
-        <a href="#" class="hover:text-white"><i class="fa-brands fa-youtube"></i></a>
-        <a href="#" class="hover:text-white"><i class="fa-brands fa-telegram"></i></a>
-        <a href="#" class="hover:text-white"><i class="fa-brands fa-whatsapp"></i></a>
-        <a href="#" class="hover:text-white"><i class="fa-brands fa-instagram"></i></a>
-      </div>
-    </div>
-  </div>
+  </nav>
 
-  <!-- 2. HEADER -->
-  <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <!-- Logo -->
-      <a href="#" class="flex items-center gap-2">
-        <div class="bg-brand-600 text-white p-1.5 rounded-lg text-xl"><i class="fa-solid fa-graduation-cap"></i></div>
-        <div class="flex flex-col">
-          <span class="font-bold text-xl leading-tight dark:text-white">NiyuktiPoints</span>
-          <span class="text-[0.65rem] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider leading-none">Learn • Prepare • Get Selected</span>
+  <div id="toast-box"></div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-content">
+      <div>
+        <div class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9L4 10.63V17.5C4 18.88 7.58 20 12 20C16.42 20 20 18.88 20 17.5V10.63L23 9L12 3Z"/></svg>
+          BTEUP Diploma Learning Platform
         </div>
-      </a>
-
-      <!-- Navigation -->
-      <nav class="hidden md:flex items-center gap-1 font-medium text-sm text-slate-600 dark:text-slate-300">
-        <a href="#" class="bg-brand-600 text-white px-4 py-2 rounded-full"><i class="fa-solid fa-home mr-1"></i> Home</a>
-        <a href="#courses" class="px-4 py-2 hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition">Courses <i class="fa-solid fa-chevron-down text-xs ml-1"></i></a>
-        <a href="#study-material" class="px-4 py-2 hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition">Study Material <i class="fa-solid fa-chevron-down text-xs ml-1"></i></a>
-        <a href="#tests" class="px-4 py-2 hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition">Tests <i class="fa-solid fa-chevron-down text-xs ml-1"></i></a>
-        <a href="#notices" class="px-4 py-2 hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition">Notices</a>
-        <a href="#doubts" class="px-4 py-2 hover:text-brand-600 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition">Doubts</a>
-      </nav>
-
-      <!-- Search & Actions -->
-      <div class="flex items-center gap-4">
-        <div class="hidden lg:flex relative">
-          <input type="text" placeholder="Search anything..." class="w-48 pl-4 pr-10 py-1.5 bg-slate-100 dark:bg-slate-800 border-none rounded-full text-sm focus:ring-2 focus:ring-brand-500 outline-none dark:text-white">
-          <i class="fa-solid fa-search absolute right-3 top-2.5 text-slate-400 text-sm"></i>
-        </div>
-        
-        <button onclick="toggleTheme()" class="text-slate-500 hover:text-brand-600 dark:text-slate-400 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
-          <i class="fa-solid fa-moon dark:hidden"></i>
-          <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+        <h1>Learn smarter.<br><span>Build your technical future.</span></h1>
+        <p>BTEUP Diploma study material, semester-wise learning and technical career opportunities — all in one place.</p>
+        <button class="btn-primary" onclick="document.getElementById('resources-sec').scrollIntoView({behavior:'smooth'})">
+          ▶ Browse Study Material ➔
         </button>
-
-        <button id="google-login-btn" onclick="signInWithGoogle()" class="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition dark:text-white">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-4 h-4"> Sign in with Google
-        </button>
-
-        <div id="user-profile-box" class="hidden items-center gap-3">
-          <div class="flex flex-col text-right">
-            <span id="user-name-label" class="text-sm font-bold dark:text-white">Student</span>
-            <span id="user-coins-label" class="text-xs font-bold text-yellow-500">50 Coins</span>
-          </div>
-          <button onclick="signOutUser()" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-right-from-bracket"></i></button>
-        </div>
       </div>
-    </div>
-  </header>
-
-  <!-- 3. HERO SECTION -->
-  <section class="hero-bg pt-16 pb-24 border-b border-slate-200 dark:border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center gap-12">
-      <!-- Left Content -->
-      <div class="w-full md:w-3/5">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm mb-6">
-          <span class="text-yellow-500"><i class="fa-solid fa-trophy"></i></span> BTEUP Diploma Learning Platform
-        </div>
-        
-        <h1 class="text-5xl md:text-6xl font-extrabold text-slate-900 dark:text-white leading-[1.1] mb-6 tracking-tight">
-          Your Diploma Journey <br/>
-          <span class="text-brand-600">Towards Success</span>
-        </h1>
-        
-        <p class="text-xl text-slate-700 dark:text-slate-300 font-semibold mb-2">Study Smart. Prepare Better. Achieve More.</p>
-        <p class="text-slate-600 dark:text-slate-400 font-medium mb-8">Video Lectures • Notes • PYQ • Online Tests • Doubt Solving</p>
-        
-        <div class="flex flex-wrap items-center gap-4 mb-8">
-          <a href="#study-material" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg shadow-brand-500/30 transition flex items-center gap-2">
-            <i class="fa-solid fa-play"></i> Browse Study Material <i class="fa-solid fa-arrow-right ml-1"></i>
-          </a>
-          <a href="#dashboard" class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-white px-6 py-3 rounded-full font-semibold border border-slate-200 dark:border-slate-700 shadow-sm transition flex items-center gap-2">
-            <i class="fa-solid fa-chart-simple text-brand-600"></i> View Dashboard
-          </a>
-        </div>
-
-        <div class="flex items-center gap-4">
-          <div class="flex -space-x-3">
-            <img class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 object-cover" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=100&q=80" alt="Student">
-            <img class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Student">
-            <img class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 object-cover" src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80" alt="Student">
-            <div class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300">+</div>
-          </div>
-          <div>
-            <div class="font-bold text-slate-900 dark:text-white leading-tight">50K+</div>
-            <div class="text-xs text-slate-500 font-medium">Happy Students</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Image/Graphics (Placeholder for exact mockup layout) -->
-      <div class="w-full md:w-2/5 relative h-[400px]">
-        <!-- Decorative Background -->
-        <div class="absolute inset-0 bg-brand-500 rounded-3xl transform rotate-3 opacity-10"></div>
-        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80" alt="Students" class="absolute inset-0 w-full h-full object-cover rounded-3xl shadow-2xl z-10" />
-        
-        <!-- Floating Glass Panels -->
-        <div class="absolute -left-12 top-20 glass-panel rounded-xl p-4 shadow-xl z-20 hidden md:block">
-          <ul class="space-y-3 font-semibold text-slate-800">
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> All Branches</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> All Semesters</li>
-            <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> 100% Free Resources</li>
-          </ul>
-        </div>
-        
-        <div class="absolute -right-8 -top-8 bg-white dark:bg-slate-800 rounded-xl p-3 shadow-lg z-20 transform rotate-6 border border-slate-100 dark:border-slate-700">
-          <span class="font-bold text-brand-600 font-mono text-sm block">Dream</span>
-          <span class="font-bold text-brand-600 font-mono text-sm block">Prepare</span>
-          <span class="font-bold text-brand-600 font-mono text-sm block">Achieve</span>
-        </div>
-      </div>
+      <div class="hero-graphic"></div>
     </div>
   </section>
 
-  <!-- 4. FEATURES BAR -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mt-10 z-30">
-    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 p-4 md:p-6 flex flex-wrap lg:flex-nowrap justify-between gap-4 md:gap-0 divide-x-0 md:divide-x divide-slate-200 dark:divide-slate-700">
-      <div class="flex items-center gap-3 px-4 w-full md:w-auto"><div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-play"></i></div><div><div class="font-bold text-sm dark:text-white">Video Lectures</div><div class="text-xs text-slate-500">Expert Faculty</div></div></div>
-      <div class="flex items-center gap-3 px-4 w-full md:w-auto"><div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg"><i class="fa-solid fa-file-pdf"></i></div><div><div class="font-bold text-sm dark:text-white">Study Material</div><div class="text-xs text-slate-500">Notes & PDFs</div></div></div>
-      <div class="flex items-center gap-3 px-4 w-full md:w-auto"><div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg"><i class="fa-solid fa-clipboard-list"></i></div><div><div class="font-bold text-sm dark:text-white">Mock Tests</div><div class="text-xs text-slate-500">& PYQ</div></div></div>
-      <div class="flex items-center gap-3 px-4 w-full md:w-auto"><div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-comments"></i></div><div><div class="font-bold text-sm dark:text-white">Doubt Solving</div><div class="text-xs text-slate-500">Ask Anytime</div></div></div>
-      <div class="flex items-center gap-3 px-4 w-full md:w-auto"><div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-lg"><i class="fa-solid fa-chart-line"></i></div><div><div class="font-bold text-sm dark:text-white">Track Progress</div><div class="text-xs text-slate-500">& Earn Coins</div></div></div>
-      <div class="flex items-center gap-3 px-4 w-full md:w-auto"><div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg"><i class="fa-solid fa-users"></i></div><div><div class="font-bold text-sm dark:text-white">Join Community</div><div class="text-xs text-slate-500">Grow Together</div></div></div>
-    </div>
-  </div>
+  <!-- Main Dashboard -->
+  <main class="container dashboard-grid">
 
-  <!-- 5. MAIN DASHBOARD CONTENT -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
-    
-    <!-- Explore by Branch & Semester -->
-    <section id="courses">
-      <div class="flex justify-between items-end mb-6">
-        <div class="border-l-4 border-brand-600 pl-3">
-          <h2 class="text-2xl font-bold text-slate-900 dark:text-white leading-tight">Explore by Branch & Semester</h2>
-          <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Choose your branch and semester to start learning</p>
-        </div>
-        <a href="#" class="text-brand-600 font-semibold text-sm hover:underline hidden sm:block">View All Courses <i class="fa-solid fa-arrow-right ml-1"></i></a>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <!-- Card 1 -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition group cursor-pointer">
-          <div class="h-28 bg-slate-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1541888087405-d7eabf8f4185?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Civil"></div>
-          <div class="p-4 flex justify-between items-center">
-            <div><h3 class="font-bold text-slate-900 dark:text-white text-sm">Civil Engineering</h3><p class="text-xs text-slate-500 mt-1 font-mono">Sem 1 • 2 • 3 • 4 • 5 • 6</p></div>
-            <button class="w-8 h-8 rounded-full bg-brand-50 text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition flex items-center justify-center"><i class="fa-solid fa-arrow-right"></i></button>
+    <!-- Admin Panel (Hidden by default) -->
+    <div class="card" id="admin-panel">
+      <h3>Administrator Control Panel</h3>
+      <div class="admin-forms">
+        <form onsubmit="adminAddNotice(event)">
+          <strong>Add Notice</strong>
+          <div class="form-group"><input type="text" id="adm-notice-title" required placeholder="Notice Title"></div>
+          <div class="form-group"><input type="url" id="adm-notice-link" placeholder="URL (Optional)"></div>
+          <button type="submit" class="btn-danger">Publish</button>
+        </form>
+        <form onsubmit="adminAddResource(event)">
+          <strong>Add Resource</strong>
+          <div class="form-group"><input type="text" id="adm-res-title" required placeholder="Resource Title"></div>
+          <div class="form-group">
+            <select id="adm-res-branch">
+              <option value="Civil Engineering">Civil</option>
+              <option value="Mechanical Engineering">Mechanical</option>
+              <option value="Electrical Engineering">Electrical</option>
+              <option value="Computer Science & IT">CS & IT</option>
+              <option value="Electronics Engineering">Electronics</option>
+            </select>
           </div>
-        </div>
-        <!-- Card 2 -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition group cursor-pointer">
-          <div class="h-28 bg-slate-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Mechanical"></div>
-          <div class="p-4 flex justify-between items-center">
-            <div><h3 class="font-bold text-slate-900 dark:text-white text-sm">Mechanical Engineering</h3><p class="text-xs text-slate-500 mt-1 font-mono">Sem 1 • 2 • 3 • 4 • 5 • 6</p></div>
-            <button class="w-8 h-8 rounded-full bg-brand-50 text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition flex items-center justify-center"><i class="fa-solid fa-arrow-right"></i></button>
-          </div>
-        </div>
-        <!-- Card 3 -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition group cursor-pointer ring-2 ring-brand-500">
-          <div class="h-28 bg-slate-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Electrical"></div>
-          <div class="p-4 flex justify-between items-center">
-            <div><h3 class="font-bold text-brand-700 dark:text-brand-400 text-sm">Electrical Engineering</h3><p class="text-xs text-slate-500 mt-1 font-mono">Sem 1 • 2 • 3 • 4 • 5 • 6</p></div>
-            <button class="w-8 h-8 rounded-full bg-brand-600 text-white transition flex items-center justify-center shadow-md"><i class="fa-solid fa-arrow-right"></i></button>
-          </div>
-        </div>
-        <!-- Card 4 -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition group cursor-pointer">
-          <div class="h-28 bg-slate-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="CS"></div>
-          <div class="p-4 flex justify-between items-center">
-            <div><h3 class="font-bold text-slate-900 dark:text-white text-sm">Computer Science / IT</h3><p class="text-xs text-slate-500 mt-1 font-mono">Sem 1 • 2 • 3 • 4 • 5 • 6</p></div>
-            <button class="w-8 h-8 rounded-full bg-brand-50 text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition flex items-center justify-center"><i class="fa-solid fa-arrow-right"></i></button>
-          </div>
-        </div>
-        <!-- Card 5 -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition group cursor-pointer">
-          <div class="h-28 bg-slate-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Electronics"></div>
-          <div class="p-4 flex justify-between items-center">
-            <div><h3 class="font-bold text-slate-900 dark:text-white text-sm">Electronics Engineering</h3><p class="text-xs text-slate-500 mt-1 font-mono">Sem 1 • 2 • 3 • 4 • 5 • 6</p></div>
-            <button class="w-8 h-8 rounded-full bg-brand-50 text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition flex items-center justify-center"><i class="fa-solid fa-arrow-right"></i></button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Mid Section: Dashboard Analytics & Resources (Combined Style from Img 2) -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="dashboard">
-      
-      <!-- Left Column -->
-      <div class="space-y-6">
-        <!-- Learning Progress -->
-        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm relative overflow-hidden">
-          <div class="flex justify-between items-center mb-6">
-            <h3 class="font-bold text-lg dark:text-white flex items-center gap-2"><i class="fa-solid fa-chart-simple text-emerald-500"></i> Your Learning Progress</h3>
-            <a href="#" class="text-sm font-semibold text-brand-600">View Dashboard <i class="fa-solid fa-arrow-right"></i></a>
-          </div>
-          <div class="flex flex-col sm:flex-row gap-4 items-center sm:items-start bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
-            <div class="w-24 h-24 bg-slate-800 rounded-lg flex items-center justify-center text-white text-3xl shrink-0 font-serif relative overflow-hidden">
-               <span class="absolute inset-0 opacity-20"><img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover"></span>
-               <span class="z-10 relative">∫π</span>
-            </div>
-            <div class="w-full flex-1">
-              <h4 class="font-bold text-slate-900 dark:text-white">Engineering Mathematics</h4>
-              <p class="text-xs text-slate-500 mb-3">12 of 18 lessons completed</p>
-              <div class="flex items-center gap-3">
-                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5">
-                  <div class="bg-brand-600 h-2.5 rounded-full" style="width: 67%"></div>
-                </div>
-                <span class="font-bold text-sm text-slate-700 dark:text-slate-300">67%</span>
-              </div>
-              <div class="mt-4 flex justify-end">
-                <button class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-1.5 rounded-full text-xs font-semibold shadow-sm transition">Resume Learning <i class="fa-solid fa-play ml-1"></i></button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Practice & Tests -->
-        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
-           <h3 class="font-bold text-lg dark:text-white flex items-center gap-2 mb-1"><i class="fa-solid fa-trophy text-yellow-500"></i> Practice & Test Your Knowledge</h3>
-           <p class="text-sm text-slate-500 mb-6">Prepare for exams with confidence</p>
-           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-             <button class="flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl hover:border-brand-500 group transition">
-               <i class="fa-regular fa-clipboard text-2xl text-blue-500 mb-2 group-hover:scale-110 transition"></i>
-               <span class="text-sm font-semibold dark:text-white">Mock Tests</span>
-             </button>
-             <button class="flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl hover:border-brand-500 group transition">
-               <i class="fa-regular fa-circle-question text-2xl text-indigo-500 mb-2 group-hover:scale-110 transition"></i>
-               <span class="text-sm font-semibold dark:text-white">Quizzes</span>
-             </button>
-             <button class="flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl hover:border-brand-500 group transition">
-               <i class="fa-solid fa-pencil text-2xl text-emerald-500 mb-2 group-hover:scale-110 transition"></i>
-               <span class="text-sm font-semibold dark:text-white">Assignments</span>
-             </button>
-             <button class="flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl hover:border-brand-500 group transition">
-               <i class="fa-solid fa-chart-bar text-2xl text-purple-500 mb-2 group-hover:scale-110 transition"></i>
-               <span class="text-sm font-semibold dark:text-white">Your Progress</span>
-             </button>
-           </div>
-        </div>
-      </div>
-
-      <!-- Right Column -->
-      <div class="space-y-6">
-        <!-- Study Resources Table -->
-        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm overflow-hidden" id="study-material">
-          <h3 class="font-bold text-lg dark:text-white flex items-center gap-2 mb-1"><i class="fa-solid fa-book-open text-brand-600"></i> Study Resources</h3>
-          <p class="text-sm text-slate-500 mb-4">Download & study material</p>
-          
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
-                  <th class="py-3 px-4 text-sm font-bold text-slate-700 dark:text-slate-300">Subject</th>
-                  <th class="py-3 px-2 text-center text-sm font-bold text-slate-700 dark:text-slate-300">Notes</th>
-                  <th class="py-3 px-2 text-center text-sm font-bold text-slate-700 dark:text-slate-300">Video</th>
-                  <th class="py-3 px-2 text-center text-sm font-bold text-slate-700 dark:text-slate-300">PYQ</th>
-                </tr>
-              </thead>
-              <tbody id="resources-table-body">
-                <tr class="border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-                  <td class="py-3 px-4 font-semibold text-sm dark:text-white">Engineering Mathematics</td>
-                  <td class="py-3 px-2 text-center"><button class="text-brand-600 hover:text-brand-800 bg-brand-50 p-1.5 rounded"><i class="fa-solid fa-download"></i></button></td>
-                  <td class="py-3 px-2 text-center"><button class="text-brand-600 hover:text-brand-800 bg-brand-50 p-1.5 rounded"><i class="fa-solid fa-play"></i></button></td>
-                  <td class="py-3 px-2 text-center"><button class="text-brand-600 hover:text-brand-800 bg-brand-50 p-1.5 rounded"><i class="fa-solid fa-file-pdf"></i></button></td>
-                </tr>
-                <tr class="border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-                  <td class="py-3 px-4 font-semibold text-sm dark:text-white">Basic Electrical Engg.</td>
-                  <td class="py-3 px-2 text-center"><button class="text-brand-600 hover:text-brand-800 bg-brand-50 p-1.5 rounded"><i class="fa-solid fa-download"></i></button></td>
-                  <td class="py-3 px-2 text-center"><button class="text-brand-600 hover:text-brand-800 bg-brand-50 p-1.5 rounded"><i class="fa-solid fa-play"></i></button></td>
-                  <td class="py-3 px-2 text-center"><button class="text-brand-600 hover:text-brand-800 bg-brand-50 p-1.5 rounded"><i class="fa-solid fa-file-pdf"></i></button></td>
-                </tr>
-                <tr class="border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-                  <td class="py-3 px-4 font-semibold text-sm dark:text-white">Machine Design</td>
-                  <td class="py-3 px-2 text-center"><button class="text-brand-600 hover:text-brand-800 bg-brand-50 p-1.5 rounded"><i class="fa-solid fa-download"></i></button></td>
-                  <td class="py-3 px-2 text-center"><button class="text-brand-600 hover:text-brand-800 bg-brand-50 p-1.5 rounded"><i class="fa-solid fa-play"></i></button></td>
-                  <td class="py-3 px-2 text-center"><button class="text-brand-600 hover:text-brand-800 bg-brand-50 p-1.5 rounded"><i class="fa-solid fa-file-pdf"></i></button></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="mt-4 text-right">
-            <a href="#" class="text-sm font-semibold text-brand-600 hover:underline">View All Resources <i class="fa-solid fa-arrow-right"></i></a>
-          </div>
-        </div>
-
-        <!-- Ask a Doubt -->
-        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm" id="doubts">
-          <h3 class="font-bold text-lg dark:text-white flex items-center gap-2 mb-1"><i class="fa-solid fa-comment-dots text-brand-600"></i> Ask a Doubt / Discussions</h3>
-          <p class="text-sm text-slate-500 mb-4">Get help from our community (Requires Login)</p>
-          <form id="doubt-form" onsubmit="submitDoubt(event)" class="relative">
-             <input type="text" name="website_url_hp" id="doubt-hp" class="hidden" tabindex="-1" autocomplete="off" />
-             <input type="text" id="doubt-subject" required class="w-full pl-4 pr-32 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none dark:text-white mb-2" placeholder="Subject (e.g. Applied Math)">
-             <textarea id="doubt-question" required rows="2" class="w-full pl-4 pr-32 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none dark:text-white resize-none" placeholder="Type your doubt here..."></textarea>
-             <button type="submit" id="doubt-submit-btn" class="absolute bottom-3 right-3 bg-brand-600 hover:bg-brand-700 text-white px-4 py-1.5 rounded-lg text-sm font-semibold shadow-sm transition">Ask Doubt</button>
-          </form>
-        </div>
-
+          <div class="form-group"><input type="url" id="adm-res-url" required placeholder="PDF Link"></div>
+          <button type="submit" class="btn-danger">Save</button>
+        </form>
       </div>
     </div>
 
-    <!-- Bottom Row: Notices, Toppers, Callout -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="notices">
+    <!-- Col 1 -->
+    <div style="display:flex; flex-direction:column; gap:24px;">
       
+      <!-- Explore by Branch -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+            Explore by Branch
+          </div>
+        </div>
+        <p class="card-sub">Choose your engineering branch to get started</p>
+        <div class="branch-grid" style="margin-top:16px;">
+          <button class="branch-btn active" onclick="filterBranch('Civil Engineering', this)">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 12h3v8h14v-8h3L12 2zm0 2.83l5 5V18H7v-8.17l5-5z"/></svg> Civil<br>Engineering
+          </button>
+          <button class="branch-btn" onclick="filterBranch('Mechanical Engineering', this)">
+            <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg> Mechanical<br>Engineering
+          </button>
+          <button class="branch-btn" onclick="filterBranch('Electrical Engineering', this)">
+            <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg> Electrical<br>Engineering
+          </button>
+          <button class="branch-btn" onclick="filterBranch('Computer Science & IT', this)">
+            <svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg> Computer Science<br>& IT
+          </button>
+          <button class="branch-btn" onclick="filterBranch('Electronics Engineering', this)">
+            <svg viewBox="0 0 24 24"><path d="M21 11V8h-2V6c0-1.1-.9-2-2-2h-2V2h-3v2h-2V2H7v2H5c-1.1 0-2 .9-2 2v2H1v3h2v2H1v3h2v2c0 1.1.9 2 2 2h2v2h3v-2h2v2h3v-2h2c1.1 0 2-.9 2-2v-2h2v-3h-2v-2h2v-3h-2zm-4 7H7V6h10v12zM9 8h6v2H9z M9 14h6v2H9z"/></svg> Electronics<br>Engineering
+          </button>
+        </div>
+      </div>
+
+      <!-- Learning Progress -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg>
+            Your Learning Progress
+          </div>
+          <a href="#" class="card-link">View Dashboard ➔</a>
+        </div>
+        <p class="card-sub">Keep going! You're doing great.</p>
+        <div class="progress-box" style="margin-top:16px;">
+          <div class="progress-thumb">∫π</div>
+          <div class="progress-info">
+            <h4>Engineering Mathematics</h4>
+            <p>12 of 18 lessons</p>
+            <div class="progress-row">
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 67%;"></div></div>
+              <span style="font-size:0.85rem; font-weight:700; margin-left:12px;">67%</span>
+            </div>
+            <div style="text-align: right; margin-top: 12px;">
+              <button class="btn-resume">Resume Learning ▶</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice & Test -->
+      <div class="card" id="practice-sec">
+        <div class="card-header">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            Practice & Test Your Knowledge
+          </div>
+        </div>
+        <p class="card-sub">Prepare for exams with confidence</p>
+        <div class="practice-grid" style="margin-top:16px;">
+          <div class="practice-item"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM12 3c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>Mock Tests</div>
+          <div class="practice-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>Quizzes</div>
+          <div class="practice-item"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Assignments</div>
+          <div class="practice-item"><svg viewBox="0 0 24 24"><path d="M16 11V3H8v6H2v12h20V11h-6zm-6-6h4v14h-4V5zm-6 6h4v8H4v-8zm16 8h-4v-6h4v6z"/></svg>Your Progress</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Col 2 -->
+    <div style="display:flex; flex-direction:column; gap:24px;">
+      
+      <!-- Select Semester -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            Select Semester
+          </div>
+        </div>
+        <p class="card-sub">Access content semester-wise</p>
+        <div class="sem-grid" style="margin-top:16px;">
+          <button class="sem-btn active">1</button>
+          <button class="sem-btn">2</button>
+          <button class="sem-btn">3</button>
+          <button class="sem-btn">4</button>
+          <button class="sem-btn">5</button>
+          <button class="sem-btn">6</button>
+        </div>
+      </div>
+
+      <!-- Study Resources (Table) -->
+      <div class="card" id="resources-sec">
+        <div class="card-header">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 3L1 9L4 10.63V17.5C4 18.88 7.58 20 12 20C16.42 20 20 18.88 20 17.5V10.63L23 9L12 3z"/></svg>
+            Study Resources
+          </div>
+        </div>
+        <p class="card-sub">Download & study material</p>
+        <table class="resource-table" style="margin-top:12px;">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th style="text-align:center;">Notes</th>
+              <th style="text-align:center;">Video Lectures</th>
+              <th style="text-align:center;">PYQ</th>
+            </tr>
+          </thead>
+          <tbody id="resources-tbody">
+            <!-- Populated via JS -->
+            <tr><td colspan="4">Loading resources...</td></tr>
+          </tbody>
+        </table>
+        <div style="text-align:right; margin-top:12px;">
+          <a href="#" class="card-link" style="justify-content:flex-end;">View All Resources ➔</a>
+        </div>
+      </div>
+
+      <!-- Ask a Doubt -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7v-2h10v2zm0-3H7V9h10v2zm0-3H7V6h10v2z"/></svg>
+            Ask a Doubt / Discussions
+          </div>
+        </div>
+        <p class="card-sub">Get help from our community</p>
+        <form class="doubt-form" onsubmit="submitDoubt(event)">
+          <input type="text" class="hp-field" id="doubt-hp" tabindex="-1">
+          <input type="text" id="doubt-input" required placeholder="Type your doubt here..." autocomplete="off">
+          <button type="submit" class="btn-doubt">Ask Doubt</button>
+        </form>
+      </div>
+
       <!-- Latest Notices -->
-      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
-        <div class="flex justify-between items-center mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">
-          <h3 class="font-bold text-lg dark:text-white flex items-center gap-2"><i class="fa-solid fa-bell text-brand-600"></i> Latest Notices</h3>
-          <a href="#" class="text-xs font-semibold text-brand-600">View All <i class="fa-solid fa-arrow-right"></i></a>
+      <div class="card" id="notices-sec">
+        <div class="card-header">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+            Latest Notices
+          </div>
+          <a href="#" class="card-link">View All Notices ➔</a>
         </div>
-        <ul class="space-y-3 text-sm" id="notices-container">
-          <li class="flex justify-between items-center group cursor-pointer">
-            <div class="flex items-center gap-2 overflow-hidden"><span class="w-1.5 h-1.5 rounded-full bg-brand-500 shrink-0"></span><span class="truncate font-medium dark:text-slate-300 group-hover:text-brand-600 transition">BTEUP Exam Form 2026 – Important Notice</span></div>
-            <span class="text-xs text-slate-400 shrink-0 font-mono ml-2">Nov 15, 2026</span>
-          </li>
-          <li class="flex justify-between items-center group cursor-pointer">
-            <div class="flex items-center gap-2 overflow-hidden"><span class="w-1.5 h-1.5 rounded-full bg-brand-500 shrink-0"></span><span class="truncate font-medium dark:text-slate-300 group-hover:text-brand-600 transition">Diploma Result 2026 – Check Now</span></div>
-            <span class="text-xs text-slate-400 shrink-0 font-mono ml-2">Nov 12, 2026</span>
-          </li>
-          <li class="flex justify-between items-center group cursor-pointer">
-            <div class="flex items-center gap-2 overflow-hidden"><span class="w-1.5 h-1.5 rounded-full bg-brand-500 shrink-0"></span><span class="truncate font-medium dark:text-slate-300 group-hover:text-brand-600 transition">Semester Exam Guidelines Released</span></div>
-            <span class="text-xs text-slate-400 shrink-0 font-mono ml-2">Nov 10, 2026</span>
-          </li>
-          <li class="flex justify-between items-center group cursor-pointer">
-            <div class="flex items-center gap-2 overflow-hidden"><span class="w-1.5 h-1.5 rounded-full bg-brand-500 shrink-0"></span><span class="truncate font-medium dark:text-slate-300 group-hover:text-brand-600 transition">New Study Material Uploaded for CS</span></div>
-            <span class="text-xs text-slate-400 shrink-0 font-mono ml-2">Nov 08, 2026</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Our Toppers -->
-      <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
-        <div class="flex justify-between items-center mb-4 border-b border-slate-100 dark:border-slate-700 pb-2">
-          <h3 class="font-bold text-lg dark:text-white flex items-center gap-2"><i class="fa-solid fa-trophy text-yellow-500"></i> Our Toppers</h3>
-          <a href="#" class="text-xs font-semibold text-brand-600">View All <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-        <div class="flex justify-between items-end mt-4 px-2">
-          <!-- Rank 2 -->
-          <div class="flex flex-col items-center">
-            <div class="relative">
-              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" class="w-12 h-12 rounded-full border-2 border-slate-200 object-cover">
-              <div class="absolute -top-2 -right-2 bg-slate-200 text-slate-600 text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-white">2</div>
-            </div>
-            <div class="text-xs font-bold mt-2 dark:text-white">Rohit Kumar</div>
-            <div class="text-[10px] text-slate-500">(Civil)</div>
-            <div class="text-xs font-bold text-brand-600 mt-1">88.5%</div>
-          </div>
-          <!-- Rank 1 -->
-          <div class="flex flex-col items-center -mt-4 transform scale-110">
-            <div class="relative">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" class="w-14 h-14 rounded-full border-2 border-yellow-400 object-cover shadow-md shadow-yellow-200/50">
-              <div class="absolute -top-2 -right-2 bg-yellow-400 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-white shadow-sm">1</div>
-            </div>
-            <div class="text-xs font-bold mt-2 dark:text-white">Anjali Singh</div>
-            <div class="text-[10px] text-slate-500">(EEE)</div>
-            <div class="text-sm font-bold text-brand-600 mt-1">87.2%</div>
-          </div>
-          <!-- Rank 3 -->
-          <div class="flex flex-col items-center">
-            <div class="relative">
-              <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80" class="w-12 h-12 rounded-full border-2 border-orange-200 object-cover">
-              <div class="absolute -top-2 -right-2 bg-orange-400 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-white">3</div>
-            </div>
-            <div class="text-xs font-bold mt-2 dark:text-white">Aman Yadav</div>
-            <div class="text-[10px] text-slate-500">(ME)</div>
-            <div class="text-xs font-bold text-brand-600 mt-1">85.9%</div>
-          </div>
+        <p class="card-sub">Stay updated with the latest information</p>
+        <div class="notice-list" id="notices-container">
+          <div class="notice-item"><span class="notice-title"><span class="dot"></span>Loading...</span></div>
         </div>
       </div>
 
-      <!-- Promo Banner -->
-      <div class="bg-gradient-to-br from-slate-900 to-brand-900 rounded-2xl p-6 shadow-sm text-white relative overflow-hidden flex flex-col justify-center">
-        <!-- Decoration -->
-        <i class="fa-regular fa-lightbulb absolute top-4 right-4 text-4xl opacity-10"></i>
-        <i class="fa-solid fa-graduation-cap absolute -bottom-4 -right-4 text-6xl opacity-20"></i>
-        
-        <h3 class="font-bold text-xl mb-2 relative z-10">Prepare for a Better <span class="text-yellow-400">Future</span></h3>
-        <p class="text-xs text-slate-300 mb-5 relative z-10 leading-relaxed">Join NiyuktiPoints and get access to premium study resources, live classes, and expert guidance for JE Exams.</p>
-        <div class="relative z-10">
-          <a href="#courses" class="inline-block bg-yellow-400 hover:bg-yellow-500 text-slate-900 text-sm font-bold px-5 py-2 rounded-full transition shadow-lg shadow-yellow-500/20">Start Learning Now <i class="fa-solid fa-arrow-right ml-1"></i></a>
+      <!-- Quick Links -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+            Quick Links
+          </div>
+        </div>
+        <div class="links-grid">
+          <a href="#" class="link-item">Branch-wise Study Material</a>
+          <a href="#" class="link-item">Live Classes</a>
+          <a href="#" class="link-item">Previous Year Questions</a>
+          <a href="#" class="link-item">Syllabus</a>
+          <a href="#" class="link-item">Important Questions</a>
+          <a href="#" class="link-item">About NiyuktiPoints</a>
         </div>
       </div>
 
     </div>
 
-    <!-- Technical Recruitment Banner (From Image 2) -->
-    <div class="bg-brand-50 dark:bg-slate-800 border border-brand-100 dark:border-slate-700 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm relative overflow-hidden">
-      <div class="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-brand-100 dark:from-slate-700 to-transparent opacity-50 pointer-events-none"></div>
-      <div class="flex items-center gap-4 relative z-10">
-        <div class="w-12 h-12 bg-white dark:bg-slate-900 rounded-xl shadow-sm flex items-center justify-center text-brand-600 text-2xl border border-slate-100 dark:border-slate-700 shrink-0">
-          <i class="fa-solid fa-briefcase"></i>
+    <!-- Technical Recruitment Opportunities Banner -->
+    <div class="job-banner">
+      <div class="job-info">
+        <div class="job-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
         </div>
-        <div>
-          <h3 class="font-bold text-lg text-slate-900 dark:text-white leading-tight">Technical Recruitment Opportunities</h3>
-          <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Explore government (SSC JE, UPPCL) & private job opportunities for diploma holders.</p>
+        <div class="job-text">
+          <h3>Technical Recruitment Opportunities</h3>
+          <p>Explore government & private job opportunities for diploma holders.</p>
         </div>
       </div>
-      <button class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-full text-sm font-semibold shadow-sm transition whitespace-nowrap relative z-10">View Jobs <i class="fa-solid fa-arrow-right ml-1"></i></button>
+      <button class="btn-dark">View Jobs ➔</button>
     </div>
 
   </main>
 
-  <!-- 6. FOOTER -->
-  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-slate-800 pb-8 mb-8">
-        
-        <!-- Brand & Tagline -->
-        <div class="flex items-center gap-3">
-          <div class="bg-white text-slate-900 p-2 rounded-lg text-2xl"><i class="fa-solid fa-graduation-cap"></i></div>
-          <div class="flex flex-col">
-            <span class="font-bold text-2xl text-white leading-tight">NiyuktiPoints</span>
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Learn • Prepare • Get Selected</span>
-          </div>
-        </div>
-        
-        <div class="text-sm text-slate-400 text-center md:text-left max-w-sm">
-          A complete Diploma Learning Platform for BTEUP Students. Study Smart, Achieve Big!
-        </div>
-
-        <!-- Subscribe -->
-        <div class="flex flex-col items-center md:items-end w-full md:w-auto">
-          <span class="text-sm font-bold text-white mb-2 block">Subscribe for Updates</span>
-          <div class="flex w-full md:w-auto">
-            <input type="email" placeholder="Enter your email" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-l-md text-sm outline-none focus:border-brand-500 text-white w-full md:w-48">
-            <button class="bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-r-md text-sm font-semibold text-white transition">Subscribe</button>
-          </div>
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <div class="brand">
+        <svg viewBox="0 0 24 24"><path d="M12 3L1 9L4 10.63V17.5C4 18.88 7.58 20 12 20C16.42 20 20 18.88 20 17.5V10.63L23 9L12 3ZM12 18C8.69 18 6 17.1 6 16.5V11.72L12 15L18 11.72V16.5C18 17.1 15.31 18 12 18ZM12 12.75L3.81 8.25L12 3.75L20.19 8.25L12 12.75Z"/></svg>
+        <div class="brand-text">
+          <span class="brand-title" style="font-size:1rem;">NiyuktiPoints</span>
+          <span class="brand-sub">Learn • Prepare • Get Selected</span>
         </div>
       </div>
-
-      <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-slate-500">
-        <div>© 2026 NiyuktiPoints. All rights reserved.</div>
-        <div class="flex gap-4">
-          <a href="#" class="hover:text-white transition">Privacy Policy</a>
-          <span class="text-slate-700">|</span>
-          <a href="#" class="hover:text-white transition">Terms & Conditions</a>
-          <span class="text-slate-700">|</span>
-          <a href="#" class="hover:text-white transition">Cookie Policy</a>
-          <span class="text-slate-700">|</span>
-          <a href="#" class="hover:text-white transition">Contact</a>
-        </div>
-        <div class="flex items-center gap-4">
-          <div class="flex gap-3 text-lg">
-            <a href="#" class="hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" class="hover:text-white transition"><i class="fa-brands fa-telegram"></i></a>
-            <a href="#" class="hover:text-white transition"><i class="fa-brands fa-whatsapp"></i></a>
-            <a href="#" class="hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
-          </div>
-          <div class="hidden lg:block border-l border-slate-700 pl-4">
-            Made with <i class="fa-solid fa-heart text-red-500 mx-1"></i> for Diploma Students
-          </div>
-        </div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Cookie Policy</a>
+        <a href="mailto:kp.team.support@gmail.com">Contact</a>
+      </div>
+      <div class="social-links">
+        <svg viewBox="0 0 24 24" onclick="toggleTheme()"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+        <a href="#"><svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg></a>
+        <a href="https://t.me/KP_CA" target="_blank"><svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.892-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
       </div>
     </div>
   </footer>
 
-  <!-- Toast Notification Container -->
-  <div id="toast-box" class="fixed top-20 right-4 z-50 flex flex-col gap-2" aria-live="polite"></div>
-
-  <!-- APPLICATION LOGIC (Strict Security & Logic Maintained) -->
+  <!-- Application Logic (Supabase + Data) -->
   <script>
-    // 1. CONFIGURATION
+    // Configuration
     const SUPABASE_URL = 'https://tcezxjtyihyuorslkqif.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xRGhaPLQesDYElQjvXPluQ_BT9aGl6r';
     const ADMIN_EMAIL = 'kp.team.support@gmail.com';
-
     let sbClient = null;
     let currentUser = null;
-    let currentProfile = null;
-    let lastSubmitTime = 0;
+    let allResources = [];
+    let activeBranch = 'Civil Engineering'; // Default
 
-    // Utility: XSS Sanitization
-    function escapeHTML(str) {
-      if (str === null || str === undefined) return '';
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    }
-    
-    function showToast(msg) {
-      const box = document.getElementById('toast-box');
-      const item = document.createElement('div');
-      item.className = 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-2 rounded-lg shadow-lg text-sm font-semibold transform transition-all duration-300 translate-x-full opacity-0 flex items-center gap-2';
-      item.innerHTML = `<i class="fa-solid fa-circle-info text-brand-500"></i> ${escapeHTML(msg)}`;
-      box.appendChild(item);
-      
-      // Animate In
-      requestAnimationFrame(() => {
-        item.classList.remove('translate-x-full', 'opacity-0');
-      });
-
-      // Remove after 3.5s
-      setTimeout(() => {
-        item.classList.add('opacity-0', 'translate-x-full');
-        setTimeout(() => item.remove(), 300);
-      }, 3500);
-    }
-
-    // Theme Toggle
-    function initTheme() {
-      const saved = localStorage.getItem('np_theme') || 'light';
-      if (saved === 'dark') document.documentElement.classList.add('dark');
-    }
-    function toggleTheme() {
-      document.documentElement.classList.toggle('dark');
-      localStorage.setItem('np_theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-    }
-
-    // Google OAuth Auth Logic
-    async function signInWithGoogle() {
-      if (!sbClient) { showToast('Connecting to database...'); return; }
-      const { error } = await sbClient.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin }});
-      if (error) showToast('Google Sign-In error: ' + error.message);
-    }
-
-    async function signOutUser() {
-      if (!sbClient) return;
-      await sbClient.auth.signOut();
-      currentUser = null; currentProfile = null;
-      updateAuthUI();
-      showToast('Signed out successfully.');
-    }
-
-    async function loadUserProfile(user) {
-      if (!user || !sbClient) return;
-      const { data, error } = await sbClient.from('profiles').select('*').eq('id', user.id).maybeSingle();
-      if (!error && data) {
-        if (data.banned_until && new Date(data.banned_until) > new Date()) {
-          showToast('Account restricted: ' + (data.ban_reason || 'Policy violation'));
-          await sbClient.auth.signOut();
-          return;
-        }
-        currentProfile = data;
-      }
-      updateAuthUI();
-    }
-
-    function updateAuthUI() {
-      const loginBtn = document.getElementById('google-login-btn');
-      const profileBox = document.getElementById('user-profile-box');
-
-      if (currentUser) {
-        loginBtn.classList.add('hidden');
-        profileBox.classList.remove('hidden');
-        profileBox.classList.add('flex');
-        
-        const displayName = (currentProfile && currentProfile.full_name) || currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
-        const coins = (currentProfile && typeof currentProfile.coins === 'number') ? currentProfile.coins : 50;
-        
-        document.getElementById('user-name-label').textContent = displayName;
-        document.getElementById('user-coins-label').textContent = coins + ' Coins';
-      } else {
-        loginBtn.classList.remove('hidden');
-        profileBox.classList.add('hidden');
-        profileBox.classList.remove('flex');
-      }
-    }
-
-    // Dynamic Data Fetching
-    async function loadPublicData() {
-      if (!sbClient) return;
-
-      // Notices
-      const { data: notices } = await sbClient.from('notices').select('*').order('created_at', { ascending: false }).limit(4);
-      if (notices && notices.length > 0) {
-        const container = document.getElementById('notices-container');
-        container.innerHTML = notices.map(n => `
-          <li class="flex justify-between items-center group cursor-pointer border-b border-slate-100 dark:border-slate-700/50 pb-2 last:border-0 last:pb-0">
-            <div class="flex items-center gap-2 overflow-hidden">
-              <span class="w-1.5 h-1.5 rounded-full bg-brand-500 shrink-0"></span>
-              <a href="${escapeHTML(n.link || '#')}" target="_blank" class="truncate font-medium dark:text-slate-300 group-hover:text-brand-600 transition">${escapeHTML(n.title)}</a>
-            </div>
-            <span class="text-xs text-slate-400 shrink-0 font-mono ml-2">${new Date(n.created_at).toLocaleDateString('en-IN', {month:'short', day:'numeric', year:'numeric'})}</span>
-          </li>
-        `).join('');
-      }
-
-      // Study Resources (Populating Table)
-      const { data: resources } = await sbClient.from('resources').select('*').order('created_at', { ascending: false }).limit(4);
-      if (resources && resources.length > 0) {
-        const tBody = document.getElementById('resources-table-body');
-        tBody.innerHTML = resources.map(r => `
-          <tr class="border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-            <td class="py-3 px-4 font-semibold text-sm dark:text-white">${escapeHTML(r.title)}</td>
-            <td class="py-3 px-2 text-center"><a href="${escapeHTML(r.url || '#')}" target="_blank" class="text-brand-600 hover:text-brand-800 bg-brand-50 dark:bg-slate-900 inline-block p-1.5 rounded transition"><i class="fa-solid fa-download"></i></a></td>
-            <td class="py-3 px-2 text-center"><a href="${escapeHTML(r.url || '#')}" target="_blank" class="text-brand-600 hover:text-brand-800 bg-brand-50 dark:bg-slate-900 inline-block p-1.5 rounded transition"><i class="fa-solid fa-play"></i></a></td>
-            <td class="py-3 px-2 text-center"><a href="${escapeHTML(r.url || '#')}" target="_blank" class="text-brand-600 hover:text-brand-800 bg-brand-50 dark:bg-slate-900 inline-block p-1.5 rounded transition"><i class="fa-solid fa-file-pdf"></i></a></td>
-          </tr>
-        `).join('');
-      }
-    }
-
-    // Submit Doubt Form Logic (Protected)
-    async function submitDoubt(e) {
-      e.preventDefault();
-      const hp = document.getElementById('doubt-hp').value;
-      if (hp) return; // Spam bot trapped
-
-      if (!currentUser) { showToast('Please Sign in with Google first to post a question.'); return; }
-
-      const now = Date.now();
-      if (now - lastSubmitTime < 30000) { showToast('Wait 30 seconds before posting another question.'); return; }
-
-      const subject = document.getElementById('doubt-subject').value.trim();
-      const question = document.getElementById('doubt-question').value.trim();
-      
-      const btn = document.getElementById('doubt-submit-btn');
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-
-      const { error } = await sbClient.from('doubts').insert([{ subject: subject, question: question, user_id: currentUser.id }]);
-      
-      btn.disabled = false;
-      btn.textContent = 'Ask Doubt';
-      
-      if (error) {
-        showToast('Submission error: ' + error.message);
-      } else {
-        lastSubmitTime = Date.now();
-        document.getElementById('doubt-form').reset();
-        showToast('Your doubt has been submitted securely!');
-      }
-    }
-
-    // Initialize
+    // Initialization
     window.addEventListener('DOMContentLoaded', async () => {
       initTheme();
       if (window.supabase) {
         sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
         const { data: { session } } = await sbClient.auth.getSession();
-        if (session && session.user) {
-          currentUser = session.user;
-          await loadUserProfile(currentUser);
-        }
-
-        sbClient.auth.onAuthStateChange(async (_event, session) => {
-          currentUser = session ? session.user : null;
-          if (currentUser) {
-            await loadUserProfile(currentUser);
-          } else {
-            updateAuthUI();
-          }
+        if (session) await handleAuth(session.user);
+        
+        sbClient.auth.onAuthStateChange((_e, session) => {
+          handleAuth(session ? session.user : null);
         });
-
-        await loadPublicData();
+        await loadData();
       }
     });
+
+    // Theme Toggle
+    function initTheme() {
+      const saved = localStorage.getItem('np_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('np_theme', next);
+    }
+
+    // UI Helpers
+    function showToast(msg) {
+      const box = document.getElementById('toast-box');
+      const el = document.createElement('div');
+      el.className = 'toast'; el.textContent = msg;
+      box.appendChild(el);
+      setTimeout(() => el.remove(), 3000);
+    }
+    function escapeHTML(str) {
+      if(!str) return '';
+      return String(str).replace(/[&<>'"]/g, tag => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[tag]));
+    }
+
+    // Authentication
+    async function signInWithGoogle() {
+      if(!sbClient) return;
+      const { error } = await sbClient.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin } });
+      if(error) showToast(error.message);
+    }
+    async function signOutUser() {
+      await sbClient.auth.signOut();
+      showToast('Signed out successfully');
+    }
+    async function handleAuth(user) {
+      currentUser = user;
+      const btnLogin = document.getElementById('btn-login');
+      const userPill = document.getElementById('user-pill');
+      const adminPanel = document.getElementById('admin-panel');
+      
+      if(user) {
+        btnLogin.style.display = 'none';
+        userPill.style.display = 'flex';
+        const name = user.user_metadata?.full_name || user.email.split('@')[0];
+        document.getElementById('user-name').textContent = escapeHTML(name);
+        if(user.email.toLowerCase() === ADMIN_EMAIL) adminPanel.style.display = 'block';
+      } else {
+        btnLogin.style.display = 'flex';
+        userPill.style.display = 'none';
+        adminPanel.style.display = 'none';
+      }
+    }
+
+    // Data Loading & Filtering
+    async function loadData() {
+      // Fetch Notices
+      const { data: notices } = await sbClient.from('notices').select('*').order('created_at', { ascending: false }).limit(4);
+      const nc = document.getElementById('notices-container');
+      if(notices && notices.length) {
+        nc.innerHTML = notices.map(n => `
+          <div class="notice-item">
+            <span class="notice-title"><span class="dot"></span>${escapeHTML(n.title)}</span>
+            <span class="notice-date">${new Date(n.created_at).toLocaleDateString('en-IN', {month:'short', day:'numeric', year:'numeric'})}</span>
+          </div>`).join('');
+      }
+
+      // Fetch Resources
+      const { data: res } = await sbClient.from('resources').select('*').order('created_at', { ascending: false });
+      if(res) allResources = res;
+      renderResources();
+    }
+
+    function filterBranch(branch, btnEl) {
+      activeBranch = branch;
+      document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+      renderResources();
+    }
+
+    function renderResources() {
+      const tb = document.getElementById('resources-tbody');
+      const filtered = allResources.length ? allResources.filter(r => r.branch === activeBranch || r.branch === 'Common / All') : [
+        { title: 'Engineering Mathematics', url: '#' },
+        { title: 'Basic Electrical Engineering', url: '#' },
+        { title: 'Machine Design', url: '#' }
+      ]; // Fallback data to match design strictly if DB is empty
+      
+      if(!filtered.length) {
+        tb.innerHTML = '<tr><td colspan="4" style="text-align:center;">No resources found for this branch.</td></tr>';
+        return;
+      }
+      
+      tb.innerHTML = filtered.map(r => `
+        <tr>
+          <td>${escapeHTML(r.title)}</td>
+          <td style="text-align:center;"><a href="${escapeHTML(r.url || '#')}" class="icon-btn" target="_blank"><svg width="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a></td>
+          <td style="text-align:center;"><a href="#" class="icon-btn"><svg width="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></a></td>
+          <td style="text-align:center;"><a href="#" class="icon-btn"><svg width="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></a></td>
+        </tr>
+      `).join('');
+    }
+
+    // Submit Doubt
+    async function submitDoubt(e) {
+      e.preventDefault();
+      if(document.getElementById('doubt-hp').value) return; // Spam check
+      if(!currentUser) return showToast('Please Sign in with Google first.');
+      
+      const val = document.getElementById('doubt-input').value.trim();
+      if(val.length < 10) return showToast('Please write a clear doubt (min 10 chars).');
+      
+      const { error } = await sbClient.from('doubts').insert([{ question: val, subject: 'General', user_id: currentUser.id }]);
+      if(error) showToast('Error: ' + error.message);
+      else { e.target.reset(); showToast('Doubt submitted successfully!'); }
+    }
+
+    // Admin Add
+    async function adminAddNotice(e) {
+      e.preventDefault();
+      const title = document.getElementById('adm-notice-title').value;
+      const link = document.getElementById('adm-notice-link').value;
+      const { error } = await sbClient.from('notices').insert([{ title, link }]);
+      if(!error) { showToast('Notice added'); e.target.reset(); loadData(); }
+    }
+    async function adminAddResource(e) {
+      e.preventDefault();
+      const title = document.getElementById('adm-res-title').value;
+      const branch = document.getElementById('adm-res-branch').value;
+      const url = document.getElementById('adm-res-url').value;
+      const { error } = await sbClient.from('resources').insert([{ title, branch, semester: '1st Sem', url }]);
+      if(!error) { showToast('Resource added'); e.target.reset(); loadData(); }
+    }
   </script>
 </body>
 </html>
