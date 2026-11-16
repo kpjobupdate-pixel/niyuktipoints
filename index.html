@@ -417,7 +417,7 @@
       color: var(--text-secondary);
     }
 
-    /* View Switching (SPA Tabs for Legal / Admin / Main) */
+    /* View Switching */
     .view-panel {
       display: none;
     }
@@ -932,9 +932,9 @@
 
   <!-- ================= APPLICATION LOGIC (Strict Security & Sanitization) ================= -->
   <script>
-    // 1. CONFIGURATION (Public Anon Key Only — Protected by Supabase RLS)
+    // 1. CONFIGURATION (Publishable Key Pre-Configured & Protected by Supabase RLS)
     const SUPABASE_URL = 'https://tcezxjtyihyuorslkqif.supabase.co';
-    const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE';
+    const SUPABASE_ANON_KEY = 'sb_publishable_xRGhaPLQesDYElQjvXPluQ_BT9aGl6r';
     const ADMIN_EMAIL = 'kp.team.support@gmail.com';
 
     let sbClient = null;
@@ -1019,7 +1019,7 @@
     // 5. GOOGLE OAUTH ONLY AUTHENTICATION
     async function signInWithGoogle() {
       if (!sbClient) {
-        showToast('Database client initializing. Verify your Supabase Anon Key.');
+        showToast('Database connection initializing. Please try again.');
         return;
       }
       const { error } = await sbClient.auth.signInWithOAuth({
@@ -1088,20 +1088,16 @@
     async function loadPublicData() {
       if (!sbClient) return;
 
-      // Load Notices
       const { data: notices } = await sbClient.from('notices').select('*').order('created_at', { ascending: false }).limit(8);
       renderNotices(notices || []);
 
-      // Load Study Resources
       const { data: resources } = await sbClient.from('resources').select('*').order('created_at', { ascending: false });
       allResources = resources || [];
       renderResources();
 
-      // Load Mock Tests
       const { data: mocks } = await sbClient.from('mock_tests').select('*').order('created_at', { ascending: false }).limit(6);
       renderMocks(mocks || []);
 
-      // Load Community Doubts
       const { data: doubts } = await sbClient.from('doubts').select('*').order('created_at', { ascending: false }).limit(6);
       renderDoubts(doubts || []);
     }
@@ -1228,7 +1224,6 @@
     // 7. SPAM-PROTECTED & RATE-LIMITED FORM SUBMISSION
     async function submitDoubt(e) {
       e.preventDefault();
-      // Check Honeypot (Bot trap)
       const hp = document.getElementById('doubt-hp').value;
       if (hp) return;
 
@@ -1237,7 +1232,6 @@
         return;
       }
 
-      // Client Rate Limiting (30 seconds cooldown)
       const now = Date.now();
       if (now - lastSubmitTime < 30000) {
         showToast('Please wait 30 seconds before posting another question.');
@@ -1314,13 +1308,12 @@
       initTheme();
       initCookieBanner();
 
-      // Render fallback UI immediately for fast page speed
       renderNotices([]);
       renderResources();
       renderMocks([]);
       renderDoubts([]);
 
-      if (window.supabase && SUPABASE_ANON_KEY !== 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE') {
+      if (window.supabase && SUPABASE_ANON_KEY) {
         sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const { data: { session } } = await sbClient.auth.getSession();
