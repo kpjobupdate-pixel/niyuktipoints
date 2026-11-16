@@ -1,651 +1,1346 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>NiyuktiPoints — BTEUP Polytechnic Notes, PYQ & Mock Tests</title>
-  <meta name="description" content="Official NiyuktiPoints Student Portal for BTEUP Diploma Engineering." />
-  <meta name="theme-color" content="#1E40AF" />
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231E40AF'/%3E%3Cpath d='M18 46V18h8l12 16V18h8v28h-8L26 30v16h-8z' fill='%23F8FAFC'/%3E%3C/svg%3E" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NiyuktiPoints — BTEUP Diploma Study Material, Notices & Technical Jobs</title>
+  <meta name="description" content="Official portal for UP Polytechnic (BTEUP) syllabus PDFs, semester notes, mock tests, scholarship alerts, and Junior Engineer (JE) recruitment updates." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://niyuktipoints.vercel.app/" />
+
+  <!-- Open Graph / Social Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NiyuktiPoints — BTEUP Diploma & JE Recruitment Portal" />
+  <meta property="og:description" content="Access verified BTEUP study notes, previous year papers, mock tests, and technical recruitment updates." />
+  <meta property="og:url" content="https://niyuktipoints.vercel.app/" />
+  <meta property="og:image" content="https://niyuktipoints.vercel.app/og-preview.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Clean Inline SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f172a'/%3E%3Cpath d='M9 23V9h4.5l6.5 9V9h3v14h-4.5L12 14v9H9z' fill='%2338bdf8'/%3E%3C/svg%3E" />
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+
+  <!-- Structured Data (JSON-LD) for Google Rich Results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "NiyuktiPoints",
+    "url": "https://niyuktipoints.vercel.app/",
+    "description": "Educational resource and recruitment update platform for Diploma Engineering students.",
+    "email": "kp.team.support@gmail.com",
+    "sameAs": [
+      "https://t.me/KP_CA"
+    ]
+  }
+  </script>
+
+  <!-- Official Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
-      --brand: #1E40AF;
-      --brand-dark: #1E3A8A;
-      --surface: #F8FAFC;
-      --card: #FFFFFF;
-      --text-main: #0F172A;
-      --text-sub: #1E293B;
-      --border: #CBD5E1;
-      --radius: 12px;
-      --btn-radius: 8px;
-      --gap: 24px;
-      --max-w: 1200px;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --brand-primary: #0284c7;
+      --brand-hover: #0369a1;
+      --brand-subtle: #e0f2fe;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --warning: #d97706;
+      --radius: 6px;
+      --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    html, body { width: 100%; max-width: 100vw; overflow-x: hidden; background-color: var(--surface); color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.5; }
-    h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-main); letter-spacing: -0.03em; font-weight: 800; }
-    h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); }
-    h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
-    p { color: var(--text-sub); }
-    a { color: inherit; text-decoration: none; }
-    .container { width: 100%; max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
-    .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
-    @media (max-width: 768px) { .section { padding: 48px 0; } .container { padding: 0 16px; } }
-    .grid-12 { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); }
-    .col-4 { grid-column: span 4; } .col-6 { grid-column: span 6; } .col-12 { grid-column: span 12; }
-    @media (max-width: 992px) { .col-4, .col-6 { grid-column: span 6; } }
-    @media (max-width: 640px) { .col-4, .col-6, .col-12 { grid-column: span 12; } }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; height: 100%; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 20px; background-color: var(--brand); color: #FFFFFF; font-weight: 600; font-size: 0.95rem; border: 1px solid var(--brand); border-radius: var(--btn-radius); cursor: pointer; white-space: nowrap; }
-    .btn:hover { opacity: 0.94; transform: translateY(-1px); }
-    .btn-full { width: 100%; }
-    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--surface); color: var(--brand); border: 1px solid var(--brand); border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
-    .badge-solid { background: var(--brand); color: #FFFFFF; }
-    .header { position: sticky; top: 0; z-index: 100; background: var(--card); border-bottom: 1px solid var(--border); height: 72px; display: flex; align-items: center; }
-    .header-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-    .logo { display: inline-flex; align-items: center; gap: 10px; font-size: 1.35rem; font-weight: 800; }
-    .logo-mark { width: 36px; height: 36px; background: var(--brand); color: #FFFFFF; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; }
-    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
-    .nav-links a { font-weight: 600; font-size: 0.95srem; }
-    .nav-links a:hover { color: var(--brand); }
-    .mobile-toggle { display: none; background: var(--brand); color: #FFFFFF; border: none; border-radius: 8px; width: 44px; height: 44px; align-items: center; justify-content: center; }
-    @media (max-width: 900px) { .nav-links, .header-cta-box { display: none; } .mobile-toggle { display: inline-flex; } }
-    .mobile-drawer { position: fixed; top: 72px; left: 0; right: 0; background: var(--card); border-bottom: 2px solid var(--brand); padding: 24px; display: none; flex-direction: column; gap: 16px; z-index: 99; }
-    .mobile-drawer.open { display: flex; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-    .form-label { font-weight: 600; font-size: 0.9rem; }
-    .form-input, .form-select, .form-textarea { width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font-size: 0.95rem; }
-    #toastBox { position: fixed; bottom: 24px; right: 24px; left: 24px; max-width: 420px; margin-left: auto; background: var(--text-main); color: #FFFFFF; border-left: 6px solid var(--brand); padding: 16px 20px; border-radius: 8px; font-weight: 600; z-index: 9999; display: none; align-items: center; justify-content: space-between; }
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.72); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
-    .modal-backdrop.open { display: flex; }
-    .modal-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); max-width: 560px; width: 100%; padding: 24px; max-height: 90vh; overflow-y: auto; }
-    .founder-img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid var(--brand); }
-    .topper-img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--brand); }
-    .notice-img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; }
-    .hidden { display: none !important; }
+
+    [data-theme="dark"] {
+      --bg-primary: #0b0f19;
+      --bg-secondary: #111827;
+      --bg-tertiary: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
+      --brand-primary: #38bdf8;
+      --brand-hover: #7dd3fc;
+      --brand-subtle: #0c4a6e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      font-size: 16px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--brand-primary);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Top Notice Bar */
+    .top-bar {
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.8125rem;
+      padding: 6px 0;
+      color: var(--text-secondary);
+    }
+    .top-bar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Header & Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background-color: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+      gap: 12px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: var(--text-primary);
+      text-decoration: none !important;
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      background: #0f172a;
+      color: #38bdf8;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      list-style: none;
+    }
+    .nav-links button {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 6px 4px;
+      font-family: inherit;
+    }
+    .nav-links button:hover, .nav-links button.active {
+      color: var(--brand-primary);
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-family: inherit;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+      text-decoration: none !important;
+    }
+    .btn-primary {
+      background-color: var(--brand-primary);
+      color: #ffffff;
+    }
+    [data-theme="dark"] .btn-primary {
+      color: #0f172a;
+    }
+    .btn-primary:hover {
+      background-color: var(--brand-hover);
+    }
+    .btn-outline {
+      background-color: transparent;
+      border-color: var(--border-color);
+      color: var(--text-primary);
+    }
+    .btn-outline:hover {
+      background-color: var(--bg-secondary);
+    }
+    .btn-google {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-google:hover {
+      background-color: var(--bg-secondary);
+    }
+    .btn-danger {
+      background-color: var(--danger);
+      color: #ffffff;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 40px 0 32px;
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .hero-badge {
+      display: inline-block;
+      background-color: var(--brand-subtle);
+      color: var(--brand-primary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .hero h1 {
+      font-size: 2rem;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 20px;
+      max-width: 58ch;
+    }
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* Notice Board Box in Hero */
+    .notice-card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .notice-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: var(--success);
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    .notice-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .notice-item {
+      font-size: 0.85rem;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+    .notice-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .notice-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    /* Main Content Sections */
+    .section {
+      padding: 36px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .section-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: var(--bg-secondary);
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+    }
+    .input, select, textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.875rem;
+    }
+    .input:focus, select:focus, textarea:focus {
+      outline: 2px solid var(--brand-primary);
+      outline-offset: -1px;
+    }
+
+    /* Cards & Grids */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .card-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+    .tag {
+      background-color: var(--bg-tertiary);
+      color: var(--text-secondary);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .card p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* View Switching (SPA Tabs for Legal / Admin / Main) */
+    .view-panel {
+      display: none;
+    }
+    .view-panel.active {
+      display: block;
+    }
+
+    /* User Profile Strip */
+    .user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+    .coin-badge {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--warning);
+      font-weight: 700;
+    }
+
+    /* Forms & Honeypot */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .hp-field {
+      position: absolute;
+      left: -9999px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Legal Document Layout */
+    .legal-doc {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 32px 0;
+    }
+    .legal-doc h1 {
+      font-size: 1.75rem;
+      margin-bottom: 8px;
+    }
+    .legal-doc h2 {
+      font-size: 1.15rem;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+    .legal-doc p, .legal-doc li {
+      font-size: 0.925rem;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+    .legal-doc ul {
+      padding-left: 20px;
+    }
+
+    /* Cookie Consent Banner */
+    .cookie-banner {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      max-width: 520px;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      display: none;
+    }
+    .cookie-banner p {
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .cookie-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    /* Toast Notification */
+    #toast-box {
+      position: fixed;
+      top: 76px;
+      right: 16px;
+      z-index: 120;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      background-color: var(--text-primary);
+      color: var(--bg-primary);
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--bg-secondary);
+      padding: 36px 0 24px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-links button, .footer-links a {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-align: left;
+      padding: 0;
+      font-family: inherit;
+    }
+    .footer-links button:hover, .footer-links a:hover {
+      color: var(--brand-primary);
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--border-color);
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* Responsive Mobile Optimization */
+    @media (max-width: 820px) {
+      .hero-grid, .grid-3, .grid-2, .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div id="toastBox"><span id="toastText">Done</span><button class="btn" style="min-height:32px;padding:0 10px;" onclick="hideToast()">OK</button></div>
+  <!-- Top Verification Strip -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <span><strong>BTEUP & JE Portal:</strong> Verified Syllabus PDFs, PYQs, and Recruitment Alerts</span>
+      <span>Support: <a href="mailto:kp.team.support@gmail.com">kp.team.support@gmail.com</a></span>
+    </div>
+  </div>
 
-  <header class="header">
-    <div class="container header-inner">
-      <a href="#home" class="logo">
-        <span class="logo-mark">NP</span>
-        <span data-en="NiyuktiPoints" data-hi="NiyuktiPoints">NiyuktiPoints</span>
+  <!-- Main Header -->
+  <header>
+    <div class="container nav-bar">
+      <a href="#home" class="brand" onclick="switchView('main-view')">
+        <span class="brand-mark" aria-hidden="true">NP</span>
+        <span>NiyuktiPoints</span>
       </a>
 
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#branches" data-en="Branches" data-hi="Branches & Notes">Branches</a></li>
-          <li><a href="#notices" data-en="Notices" data-hi="Notices & Syllabus">Notices</a></li>
-          <li><a href="#mocktests" data-en="Mock Tests" data-hi="Mock Tests (CBT)">Mock Tests</a></li>
-          <li><a href="#toppers" data-en="Toppers" data-hi="Toppers (Hall of Fame)">Toppers</a></li>
-          <li><a href="#contact" data-en="Contact" data-hi="Contact & Orders">Contact</a></li>
-        </ul>
-      </nav>
+      <ul class="nav-links" role="navigation" aria-label="Primary Navigation">
+        <li><button type="button" class="active" onclick="switchView('main-view'); scrollToSection('resources-sec')">Study Material</button></li>
+        <li><button type="button" onclick="switchView('main-view'); scrollToSection('mock-sec')">Mock Tests</button></li>
+        <li><button type="button" onclick="switchView('main-view'); scrollToSection('doubts-sec')">Community Doubts</button></li>
+        <li id="admin-nav-item" style="display:none;"><button type="button" onclick="switchView('admin-view')" style="color:var(--danger);font-weight:700;">Admin Panel</button></li>
+      </ul>
 
-      <div style="display:flex;align-items:center;gap:12px;">
-        <!-- LANGUAGE TOGGLE BUTTON -->
-        <button class="btn" style="background:var(--surface);color:var(--brand);border-color:var(--brand);padding:0 12px;min-height:38px;font-size:0.85rem;" onclick="toggleLanguage()">
-          🌐 <span id="langToggleText">Hinglish</span>
+      <div class="nav-actions">
+        <button type="button" class="btn btn-outline" id="theme-toggle" aria-label="Toggle color theme" onclick="toggleTheme()">Dark</button>
+        
+        <!-- Logged Out: Google Sign-In Only -->
+        <button type="button" class="btn btn-google" id="google-login-btn" onclick="signInWithGoogle()">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/>
+            <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/>
+            <path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 13.5s.6 4.5 1.6 6.5l3.7-2.9z"/>
+            <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 20.9 7.4 24 12 24z"/>
+          </svg>
+          <span>Sign in with Google</span>
         </button>
-        <div class="header-cta-box">
-          <button class="btn" onclick="openAuthModal()"><span id="headerAuthLabel" data-en="Student Login" data-hi="Student Login / Signup">Student Login</span></button>
+
+        <!-- Logged In User State -->
+        <div id="user-profile-box" style="display:none; align-items:center; gap:8px;">
+          <div class="user-chip">
+            <span id="user-name-label">Student</span>
+            <span class="coin-badge" id="user-coins-label">50 Coins</span>
+          </div>
+          <button type="button" class="btn btn-outline" onclick="signOutUser()">Sign Out</button>
         </div>
       </div>
-      <button class="mobile-toggle" onclick="toggleMobileMenu()"><i data-lucide="menu"></i></button>
     </div>
   </header>
 
-  <div class="mobile-drawer" id="mobileDrawer">
-    <a href="#branches" onclick="toggleMobileMenu()" data-en="Branches" data-hi="Branches & Notes">Branches</a>
-    <a href="#notices" onclick="toggleMobileMenu()" data-en="Notices" data-hi="Notices & Syllabus">Notices</a>
-    <a href="#mocktests" onclick="toggleMobileMenu()" data-en="Mock Tests" data-hi="Mock Tests (CBT)">Mock Tests</a>
-    <a href="#toppers" onclick="toggleMobileMenu()" data-en="Toppers" data-hi="Toppers (Hall of Fame)">Toppers</a>
-    <a href="#contact" onclick="toggleMobileMenu()" data-en="Contact" data-hi="Contact & Orders">Contact</a>
-    <button class="btn btn-full" onclick="openAuthModal();toggleMobileMenu()"><span data-en="Student Login" data-hi="Student Login / Profile">Student Login</span></button>
-  </div>
+  <div id="toast-box" aria-live="polite"></div>
 
-  <main>
-    <section class="section" id="home">
-      <div class="container">
-        <div class="grid-12" style="align-items: center;">
-          <div class="col-8">
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
-              <span class="badge badge-solid" data-en="BTEUP Polytechnic Hub" data-hi="BTEUP Polytechnic Hub">BTEUP Polytechnic Hub</span>
-              <span class="badge" id="studentGreetingBadge">50 Coins • 1 Day Streak</span>
-            </div>
-            <h1 data-en="Master Every BTEUP Semester With Zero Clutter." data-hi="Har BTEUP Semester Mein Top Karein Bina Kisi Confusion Ke.">Master Every BTEUP Semester With Zero Clutter.</h1>
-            <p style="font-size:1.15rem;margin:16px 0 28px;max-width:600px;" data-en="Verified polytechnic notes, solved 5-year papers, CBT timer tests, and offline study access built for serious engineering students." data-hi="Verified polytechnic notes, last 5-year solved papers, CBT timer mock tests, aur offline study access jo sirf serious engineering students ke liye bane hain.">
-              Verified polytechnic notes, solved 5-year papers, CBT timer tests, and offline study access built for serious engineering students.
-            </p>
-            <button class="btn" onclick="document.getElementById('branches').scrollIntoView({behavior:'smooth'})">
-              <span data-en="Open Semester Hub" data-hi="Semester Hub Kholein">Open Semester Hub</span>
-            </button>
-          </div>
-
-          <div class="col-4">
-            <div class="card">
-              <div style="display:flex;align-items:center;gap:16px;">
-                <img id="founderPhotoEl" src="https://ui-avatars.com/api/?name=Prince+Kumar&background=1E40AF&color=fff&size=256" alt="Prince Kumar" class="founder-img" />
-                <div>
-                  <span class="badge" data-en="Verified Founder" data-hi="Verified Founder">Verified Founder</span>
-                  <h3 id="founderNameEl" style="margin-top:6px;">Prince Kumar</h3>
-                  <p id="founderRoleEl" style="font-size:0.9rem;">Electrical Engineering • BTEUP</p>
-                </div>
-              </div>
-              <p style="font-size:0.95rem;" data-en="Built to give every diploma student instant access to accurate notes and topper strategies." data-hi="Har diploma student ko accurate notes aur topper strategies dene ke liye banaya gaya hai.">
-                Built to give every diploma student instant access to accurate notes and topper strategies.
-              </p>
-              <a href="tel:+919455298136" class="btn btn-full">Call +91 9455298136</a>
-            </div>
+  <!-- ================= MAIN VIEW ================= -->
+  <main id="main-view" class="view-panel active">
+    
+    <!-- Hero Section with One Clear Primary CTA -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="hero-badge">BTEUP • SSC JE • UPPCL JE • RRB JE</span>
+          <h1>Structured Engineering Notes, Syllabus PDFs & Technical Job Alerts</h1>
+          <p>Built for Polytechnic Diploma students across Electrical, Mechanical, Civil, and CS branches. Access verified semester notes, solve previous year papers, and track official BTEUP & Junior Engineer recruitment notices.</p>
+          <div class="hero-cta-group">
+            <a href="#resources-sec" class="btn btn-primary" onclick="scrollToSection('resources-sec')">Browse Study Material</a>
+            <span style="font-size:0.825rem; color:var(--text-muted);">Instant PDF access • Google Verified Portal</span>
           </div>
         </div>
+
+        <!-- Live Official Notice Board -->
+        <aside class="notice-card" aria-label="Latest Official Notices">
+          <div class="notice-card-header">
+            <span><span class="status-dot"></span>Official Notice Board</span>
+            <span style="font-size:0.75rem; color:var(--text-muted);">Live Sync</span>
+          </div>
+          <ul class="notice-list" id="notices-container">
+            <li class="notice-item">
+              <span class="notice-date">Loading notices...</span>
+              <span>Connecting to verified database...</span>
+            </li>
+          </ul>
+        </aside>
       </div>
     </section>
 
-    <section class="section hidden" id="studentProfileSection">
+    <!-- Study Resources Section -->
+    <section class="section" id="resources-sec">
       <div class="container">
-        <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;">
-            <div>
-              <span class="badge badge-solid" data-en="Active Student Profile" data-hi="Active Student Profile">Active Student Profile</span>
-              <h2 id="profileNameHeading" style="margin-top:8px;">Student Name</h2>
-              <p id="profileMetaText">Electrical Engineering • 6th Semester</p>
-            </div>
-            <button class="btn" id="openAdminBtn" style="display:none;" onclick="toggleAdminPanel()">Open Admin Panel</button>
-          </div>
-          <div style="margin-top:12px;">
-            <p style="font-weight:600;margin-bottom:8px;" data-en="Earned Profile Badges:" data-hi="Aapke Jeete Huye Badges:">Earned Profile Badges:</p>
-            <div id="profileBadgesList" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="branches">
-      <div class="container">
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
+        <div class="section-header">
           <div>
-            <span class="badge" data-en="Academic Folders" data-hi="Academic Folders">Academic Folders</span>
-            <h2 data-en="Select Branch & Semester" data-hi="Apni Branch aur Semester Chunein">Select Branch & Semester</h2>
-            <p data-en="Access video classes, PDF notes, books, PYQs, and practical files." data-hi="Video classes, PDF notes, books, PYQ aur practical files yahan access karein.">Access video classes, PDF notes, books, PYQs, and practical files.</p>
+            <h2 class="section-title">Diploma Study Material & PYQs</h2>
+            <p class="section-subtitle">Filter by engineering branch, semester, or resource category</p>
           </div>
-          <button class="btn" onclick="openOfflineSavedModal()">Offline Library (<span id="offlineCount">0</span>)</button>
         </div>
 
-        <div class="grid-12" style="margin-bottom:24px;">
-          <div class="col-4">
-            <label class="form-label" data-en="1. Engineering Branch" data-hi="1. Engineering Branch">1. Engineering Branch</label>
-            <select id="branchSelect" class="form-select" onchange="renderResources()">
+        <div class="filter-bar">
+          <input type="search" id="search-resource" class="input" placeholder="Search subject or topic..." oninput="renderResources()" style="flex:1; min-width:200px;" aria-label="Search study material" />
+          <select id="filter-branch" onchange="renderResources()" aria-label="Filter by Branch">
+            <option value="ALL">All Branches</option>
+            <option value="Electrical Engineering">Electrical Engineering</option>
+            <option value="Mechanical Engineering">Mechanical Engineering</option>
+            <option value="Civil Engineering">Civil Engineering</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Common / All">Common / All</option>
+          </select>
+          <select id="filter-sem" onchange="renderResources()" aria-label="Filter by Semester">
+            <option value="ALL">All Semesters</option>
+            <option value="1st Sem">1st Semester</option>
+            <option value="2nd Sem">2nd Semester</option>
+            <option value="3rd Sem">3rd Semester</option>
+            <option value="4th Sem">4th Semester</option>
+            <option value="5th Sem">5th Semester</option>
+            <option value="6th Sem">6th Semester</option>
+            <option value="JE Exam">JE Exam Prep</option>
+          </select>
+        </div>
+
+        <div class="grid-3" id="resources-container">
+          <div class="card">
+            <p>Loading study resources...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mock Tests Section -->
+    <section class="section" id="mock-sec">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Technical Mock Tests & Practice Sets</h2>
+            <p class="section-subtitle">Attempt timed MCQ sets for semester exams and JE CBT preparation</p>
+          </div>
+        </div>
+        <div class="grid-3" id="mocks-container">
+          <div class="card">
+            <p>Loading mock tests...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Doubts & Student Feedback Section (With Anti-Spam & XSS Sanitization) -->
+    <section class="section" id="doubts-sec">
+      <div class="container grid-2">
+        
+        <!-- Ask a Doubt Form -->
+        <div>
+          <h2 class="section-title" style="margin-bottom:6px;">Ask an Academic or Exam Doubt</h2>
+          <p class="section-subtitle" style="margin-bottom:16px;">Requires Google Sign-In. Protected against spam & automated bots.</p>
+          
+          <form id="doubt-form" onsubmit="submitDoubt(event)" novalidate>
+            <!-- Honeypot field for Spam Bots -->
+            <input type="text" name="website_url_hp" id="doubt-hp" class="hp-field" tabindex="-1" autocomplete="off" />
+            
+            <div class="form-group">
+              <label for="doubt-subject">Subject / Exam Name</label>
+              <input type="text" id="doubt-subject" class="input" required maxlength="80" placeholder="e.g., Electrical Machines-II / UPPCL JE" />
+            </div>
+            <div class="form-group">
+              <label for="doubt-question">Your Question</label>
+              <textarea id="doubt-question" rows="4" required maxlength="500" placeholder="Write your syllabus or recruitment question clearly..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="doubt-submit-btn">Post Doubt</button>
+          </form>
+        </div>
+
+        <!-- Recent Community Doubts -->
+        <div>
+          <h2 class="section-title" style="margin-bottom:6px;">Recent Student Discussions</h2>
+          <p class="section-subtitle" style="margin-bottom:16px;">Verified answers from faculty and peers</p>
+          <div id="doubts-list-container" style="display:flex; flex-direction:column; gap:12px;">
+            <div class="card"><p>Loading discussions...</p></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= ADMIN PANEL VIEW (Restricted by RLS & Email Check) ================= -->
+  <section id="admin-view" class="view-panel container section">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Administrator Control Panel</h1>
+        <p class="section-subtitle">Protected by Supabase Row Level Security (RLS). Only authorized admin writes are permitted.</p>
+      </div>
+      <button type="button" class="btn btn-outline" onclick="switchView('main-view')">Back to Website</button>
+    </div>
+
+    <div class="grid-2">
+      <!-- Add Official Notice -->
+      <div class="card">
+        <h3>Publish Official Notice</h3>
+        <form onsubmit="adminAddNotice(event)">
+          <div class="form-group">
+            <label for="adm-notice-title">Notice Headline</label>
+            <input type="text" id="adm-notice-title" class="input" required maxlength="140" placeholder="e.g., BTEUP Even Semester Exam Schedule Released" />
+          </div>
+          <div class="form-group">
+            <label for="adm-notice-link">Official PDF / Reference URL (Optional)</label>
+            <input type="url" id="adm-notice-link" class="input" placeholder="https://..." />
+          </div>
+          <button type="submit" class="btn btn-primary">Publish Notice</button>
+        </form>
+      </div>
+
+      <!-- Add Study Resource -->
+      <div class="card">
+        <h3>Upload Study Resource / PDF Link</h3>
+        <form onsubmit="adminAddResource(event)">
+          <div class="form-group">
+            <label for="adm-res-title">Resource Title</label>
+            <input type="text" id="adm-res-title" class="input" required maxlength="120" placeholder="e.g., Power Systems Complete Notes PDF" />
+          </div>
+          <div class="form-group">
+            <label for="adm-res-branch">Branch</label>
+            <select id="adm-res-branch" required>
               <option value="Electrical Engineering">Electrical Engineering</option>
               <option value="Mechanical Engineering">Mechanical Engineering</option>
               <option value="Civil Engineering">Civil Engineering</option>
-              <option value="Computer Science & IT">Computer Science & IT</option>
-              <option value="Electronics Engineering">Electronics Engineering</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Common / All">Common / All</option>
             </select>
           </div>
-          <div class="col-4">
-            <label class="form-label" data-en="2. Semester" data-hi="2. Semester">2. Semester</label>
-            <select id="semesterSelect" class="form-select" onchange="renderResources()">
-              <option value="ALL">All Semesters (1st to 6th)</option>
-              <option value="1st Semester">1st Semester</option>
-              <option value="2nd Semester">2nd Semester</option>
-              <option value="3rd Semester">3rd Semester</option>
-              <option value="4th Semester">4th Semester</option>
-              <option value="5th Semester">5th Semester</option>
-              <option value="6th Semester">6th Semester</option>
+          <div class="form-group">
+            <label for="adm-res-sem">Semester</label>
+            <select id="adm-res-sem" required>
+              <option value="1st Sem">1st Sem</option>
+              <option value="2nd Sem">2nd Sem</option>
+              <option value="3rd Sem">3rd Sem</option>
+              <option value="4th Sem">4th Sem</option>
+              <option value="5th Sem">5th Sem</option>
+              <option value="6th Sem">6th Sem</option>
+              <option value="JE Exam">JE Exam</option>
             </select>
           </div>
-          <div class="col-4">
-            <label class="form-label" data-en="3. Material Category" data-hi="3. Material Type">3. Material Category</label>
-            <select id="categorySelect" class="form-select" onchange="renderResources()">
-              <option value="ALL">All Categories</option>
-              <option value="Video Classes">Video Classes</option>
-              <option value="PDF Notes">PDF Notes</option>
-              <option value="Books">Books</option>
-              <option value="PYQ">5-Year PYQ Papers</option>
-              <option value="Practical Files">Practical Files</option>
-              <option value="Exam Booster">Exam Booster</option>
-            </select>
+          <div class="form-group">
+            <label for="adm-res-url">Direct PDF / Drive URL</label>
+            <input type="url" id="adm-res-url" class="input" required placeholder="https://drive.google.com/..." />
           </div>
-        </div>
-
-        <div class="grid-12" id="resourcesGrid"></div>
+          <button type="submit" class="btn btn-primary">Save Resource</button>
+        </form>
       </div>
-    </section>
-
-    <section class="section" id="notices">
-      <div class="container">
-        <h2 data-en="Live BTEUP Notices & Syllabus" data-hi="Live BTEUP Notices aur Syllabus">Live BTEUP Notices & Syllabus</h2>
-        <p style="margin-bottom:24px;" data-en="Official examination updates and syllabus PDF links." data-hi="Official exam updates aur syllabus PDF links yahan dekhein.">Official examination updates and syllabus PDF links.</p>
-        <div class="grid-12" id="noticesGrid"></div>
-      </div>
-    </section>
-
-    <section class="section" id="mocktests">
-      <div class="container">
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
-          <div>
-            <h2 data-en="Live Timer Mock Tests & Copy Strategy" data-hi="Live Timer Mock Tests aur Answer Copy Writing Tips">Live Timer Mock Tests & Copy Strategy</h2>
-            <p data-en="Complete a test to earn +25 Coins and unlock the Topper badge." data-hi="Test poora karke +25 Coins jeetein aur Topper badge unlock karein.">Complete a test to earn +25 Coins and unlock the Topper badge.</p>
-          </div>
-          <button class="btn" onclick="startSampleMockTest()">Start CBT Test</button>
-        </div>
-        <div class="grid-12">
-          <div class="col-6">
-            <div class="card">
-              <h3>BTEUP Semester & JE Foundation Test</h3>
-              <p>10 technical questions with real-time timer.</p>
-              <button class="btn" onclick="startSampleMockTest()">Launch CBT Exam (+25 Coins)</button>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="card">
-              <h3>BTEUP Topper Answer Copy Rules</h3>
-              <p>Draw neat diagrams, underline formulas, never leave questions blank.</p>
-              <button class="btn" onclick="unlockCopyTipsAchievement()">Mark Revision Done (+10 Coins)</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="toppers">
-      <div class="container">
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
-          <div>
-            <h2 data-en="Hall of Fame & Toppers" data-hi="Hall of Fame aur Toppers">Hall of Fame & Toppers</h2>
-            <p data-en="Top scorers and doubt solvers." data-hi="Top scorers aur doubt solvers ki list.">Top scorers and doubt solvers.</p>
-          </div>
-          <button class="btn" onclick="openAchievementModal('Study Star')">Submit Topper Claim</button>
-        </div>
-        <div class="grid-12" id="toppersGrid"></div>
-      </div>
-    </section>
-
-    <section class="section" id="reviews">
-      <div class="container">
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
-          <div>
-            <h2 data-en="Verified Student Testimonials" data-hi="Students ke Real Reviews">Verified Student Testimonials</h2>
-            <p data-en="Real reviews from polytechnic students." data-hi="Polytechnic students ke real feedback.">Real reviews from polytechnic students.</p>
-          </div>
-          <button class="btn" onclick="openReviewModal()">Write Review</button>
-        </div>
-        <div class="grid-12" id="reviewsGrid"></div>
-      </div>
-    </section>
-
-    <section class="section" id="doubtSection">
-      <div class="container">
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
-          <div>
-            <span class="badge badge-solid" data-en="App-Only Feature" data-hi="App-Only Feature">App-Only Feature</span>
-            <h2 data-en="Time-Locked Image Doubt Chatroom" data-hi="Time-Locked Image Doubt Chatroom">Time-Locked Image Doubt Chatroom</h2>
-            <p id="doubtStatusText" data-en="Strict image-only question & answer board." data-hi="Sirf image-based question aur answer board.">Strict image-only question & answer board.</p>
-          </div>
-          <button class="btn" onclick="openDoubtUploadModal(null)">Post Question Photo (-10 Coins)</button>
-        </div>
-        <div class="grid-12" id="doubtsGrid"></div>
-      </div>
-    </section>
-
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="grid-12">
-          <div class="col-6">
-            <form class="card" onsubmit="submitStudentForm(event)">
-              <h3 data-en="Submit Request / Order Form" data-hi="Training Report ya Project Kit Order Karein">Submit Request / Order Form</h3>
-              <div class="form-group">
-                <label class="form-label">Select Service</label>
-                <select id="formType" class="form-select" required>
-                  <option value="Summer Training Report">Summer Training Report Booking</option>
-                  <option value="Hardware Project Kit">Working Hardware Project Kit Order</option>
-                  <option value="Direct Admin Message">Direct DM to Admin</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label" data-en="Full Name" data-hi="Aapka Naam">Full Name</label>
-                <input id="formName" type="text" class="form-input" required />
-              </div>
-              <div class="form-group">
-                <label class="form-label" data-en="Phone / WhatsApp" data-hi="Phone / WhatsApp Number">Phone / WhatsApp</label>
-                <input id="formPhone" type="tel" class="form-input" required />
-              </div>
-              <div class="form-group">
-                <label class="form-label" data-en="Branch & Semester" data-hi="Branch aur Semester">Branch & Semester</label>
-                <input id="formBranch" type="text" class="form-input" required />
-              </div>
-              <div class="form-group">
-                <label class="form-label" data-en="Message / Requirements" data-hi="Message ya Requirement">Message / Requirements</label>
-                <textarea id="formDetails" rows="3" class="form-textarea" required></textarea>
-              </div>
-              <button type="submit" class="btn btn-full" data-en="Send Request" data-hi="Request Bhejein">Send Request</button>
-            </form>
-          </div>
-          <div class="col-6">
-            <div class="card">
-              <h3 data-en="Instant Help Desk" data-hi="Instant Help Desk">Instant Help Desk</h3>
-              <p data-en="Connect directly with Founder Prince Kumar." data-hi="Founder Prince Kumar se seedha contact karein.">Connect directly with Founder Prince Kumar.</p>
-              <a href="tel:+919455298136" class="btn btn-full">Call: +91 9455298136</a>
-              <a href="mailto:kp.team.support@gmail.com" class="btn btn-full">Email: kp.team.support@gmail.com</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section hidden" id="adminPanelSection">
-      <div class="container">
-        <h2>Master Admin Panel (Prince Kumar)</h2>
-        <div class="grid-12" style="margin-top:24px;">
-          <div class="col-6">
-            <form class="card" onsubmit="saveAdminSettings(event)">
-              <h3>1. Founder Photo & Doubt Time-Lock</h3>
-              <div class="form-group">
-                <label class="form-label">Founder Photo URL</label>
-                <input type="url" id="adminFounderPhotoInput" class="form-input" required />
-              </div>
-              <div class="form-group">
-                <label class="form-label">Doubt Chat Status</label>
-                <select id="adminDoubtEnabled" class="form-select">
-                  <option value="false">Locked</option>
-                  <option value="true">Open</option>
-                </select>
-              </div>
-              <button type="submit" class="btn btn-full">Save Settings</button>
-            </form>
-          </div>
-          <div class="col-6">
-            <form class="card" onsubmit="adminAddResource(event)">
-              <h3>2. Add Material / Notes</h3>
-              <div class="form-group">
-                <input type="text" id="resSub" class="form-input" placeholder="Subject Code (UEE)" required />
-                <input type="text" id="resTitle" class="form-input" placeholder="Title" style="margin-top:8px;" required />
-                <input type="url" id="resUrl" class="form-input" placeholder="Drive Link" style="margin-top:8px;" required />
-              </div>
-              <button type="submit" class="btn btn-full">Publish</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div class="modal-backdrop" id="achievementModal">
-    <div class="modal-box">
-      <h2 id="unlockedBadgeTitle">Achievement Unlocked!</h2>
-      <form onsubmit="submitTopperClaim(event)">
-        <div class="form-group"><input type="url" id="claimPhotoUrl" class="form-input" placeholder="Photo URL" required /></div>
-        <div class="form-group"><input type="text" id="claimName" class="form-input" placeholder="Full Name" required /></div>
-        <div class="form-group"><input type="text" id="claimBranchSem" class="form-input" placeholder="Branch & Sem" required /></div>
-        <div class="form-group"><input type="text" id="claimCollege" class="form-input" placeholder="College" required /></div>
-        <div class="form-group"><input type="text" id="claimQuote" class="form-input" placeholder="Study Tip" required /></div>
-        <button type="submit" class="btn btn-full">Submit Claim</button>
-      </form>
     </div>
-  </div>
+  </section>
 
-  <div class="modal-backdrop" id="authModal">
-    <div class="modal-box">
-      <h2>Student Login</h2>
-      <form onsubmit="handleAuthSubmit(event)">
-        <div class="form-group"><input type="email" id="authEmail" class="form-input" placeholder="Email" required /></div>
-        <div class="form-group"><input type="password" id="authPassword" class="form-input" placeholder="Password" required /></div>
-        <div class="form-group"><input type="text" id="authFullName" class="form-input" placeholder="Full Name" /></div>
-        <button type="submit" class="btn btn-full" id="authSubmitBtn">Login</button>
-        <button type="button" class="btn btn-full" onclick="handleLogout()" id="logoutBtn" style="display:none;margin-top:8px;">Logout</button>
-      </form>
+  <!-- ================= PRIVACY POLICY VIEW ================= -->
+  <section id="privacy-view" class="view-panel container legal-doc">
+    <button type="button" class="btn btn-outline" onclick="switchView('main-view')" style="margin-bottom:20px;">← Back to Home</button>
+    <h1>Privacy Policy</h1>
+    <p><strong>Effective Date:</strong> November 16, 2026</p>
+    <p>At <strong>NiyuktiPoints</strong>, we prioritize the security and privacy of Diploma Engineering students and exam aspirants. This Privacy Policy details how your data is handled when you use our platform.</p>
+    
+    <h2>1. Information We Collect</h2>
+    <ul>
+      <li><strong>Google OAuth Authentication:</strong> We use "Sign in with Google" exclusively. When you sign in, we receive your verified email address and basic profile name via Google OAuth to create your student profile. We never see or store your passwords.</li>
+      <li><strong>Academic Activity:</strong> We store your community doubts, resource submissions, and reward coins inside our Row-Level-Secured (RLS) Supabase database.</li>
+    </ul>
+
+    <h2>2. Cookies & Local Storage</h2>
+    <p>We use essential browser storage solely to keep you signed in across sessions, remember your Dark/Light theme preference, and save your cookie consent choice. We do not sell personal data to third-party advertisers.</p>
+
+    <h2>3. Data Security</h2>
+    <p>All traffic is encrypted over HTTPS (TLS). Database tables are protected by PostgreSQL Row Level Security (RLS) policies, ensuring users can only modify their own permitted records.</p>
+
+    <h2>4. Contact Us</h2>
+    <p>For account deletion requests or privacy inquiries, email us at <a href="mailto:kp.team.support@gmail.com">kp.team.support@gmail.com</a>.</p>
+  </section>
+
+  <!-- ================= TERMS & CONDITIONS VIEW ================= -->
+  <section id="terms-view" class="view-panel container legal-doc">
+    <button type="button" class="btn btn-outline" onclick="switchView('main-view')" style="margin-bottom:20px;">← Back to Home</button>
+    <h1>Terms and Conditions</h1>
+    <p><strong>Last Updated:</strong> November 16, 2026</p>
+    <p>By accessing or using <strong>NiyuktiPoints</strong>, you agree to comply with the following Terms and Conditions.</p>
+
+    <h2>1. Educational Use Only</h2>
+    <p>All syllabus copies, study notes, previous year question papers, and recruitment updates provided on NiyuktiPoints are for personal educational preparation. Users must verify final examination dates and recruitment rules from official BTEUP or respective government commission portals.</p>
+
+    <h2>2. Account Authenticity & Anti-Spam</h2>
+    <ul>
+      <li>Access to interactive features requires a verified Google account.</li>
+      <li>Posting abusive content, malicious links, or automated spam in the Community Doubts section will result in immediate account suspension.</li>
+    </ul>
+
+    <h2>3. Intellectual Property</h2>
+    <p>Platform code, structured summaries, and original test sets belong to NiyuktiPoints. If you believe any student-submitted study material infringes copyright, please report it to <a href="mailto:kp.team.support@gmail.com">kp.team.support@gmail.com</a> for prompt removal.</p>
+  </section>
+
+  <!-- Cookie Consent Banner -->
+  <aside class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Cookie Consent">
+    <p>We use essential cookies and local storage to manage secure Google Sign-In sessions and remember your display preferences. Read our <a href="#privacy" onclick="switchView('privacy-view')">Privacy Policy</a>.</p>
+    <div class="cookie-actions">
+      <button type="button" class="btn btn-outline" onclick="acceptCookies('essential')">Essential Only</button>
+      <button type="button" class="btn btn-primary" onclick="acceptCookies('all')">Accept</button>
     </div>
-  </div>
+  </aside>
 
-  <div class="modal-backdrop" id="reviewModal">
-    <div class="modal-box">
-      <h2>Write Review</h2>
-      <form onsubmit="submitStudentReview(event)">
-        <div class="form-group"><textarea id="reviewTextInput" class="form-textarea" rows="3" required></textarea></div>
-        <button type="submit" class="btn btn-full">Submit</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="doubtModal">
-    <div class="modal-box">
-      <h2 id="doubtModalTitle">Upload Doubt Photo</h2>
-      <form onsubmit="submitDoubtImage(event)">
-        <input type="hidden" id="doubtReplyToId" />
-        <div class="form-group"><input type="url" id="doubtUploadedUrl" class="form-input" placeholder="Image URL (ImgBB / Drive)" required /></div>
-        <button type="submit" class="btn btn-full">Post Photo</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="cbtModal">
-    <div class="modal-box">
-      <h3>BTEUP CBT Test</h3>
-      <div id="cbtQuestionContainer" style="margin:16px 0;"></div>
-      <button class="btn" onclick="closeModal('cbtModal')">Close</button>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="offlineModal">
-    <div class="modal-box">
-      <h3>Offline Library</h3>
-      <div id="offlineListContainer" style="margin:16px 0;"></div>
-      <button class="btn btn-full" onclick="closeModal('offlineModal')">Close</button>
-    </div>
-  </div>
-
-  <footer class="section" style="background:var(--card);border-bottom:none;">
+  <!-- Footer -->
+  <footer>
     <div class="container">
-      <p>© <span id="currentYear">2026</span> NiyuktiPoints • Managed by Prince Kumar</p>
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="margin-bottom:8px;">
+            <span class="brand-mark">NP</span>
+            <span>NiyuktiPoints</span>
+          </div>
+          <p style="max-width:42ch; margin-bottom:10px;">Dedicated educational & technical recruitment portal for Polytechnic Diploma students in Uttar Pradesh and across India.</p>
+          <p>Contact: <a href="mailto:kp.team.support@gmail.com">kp.team.support@gmail.com</a></p>
+        </div>
+
+        <div>
+          <strong style="display:block; margin-bottom:10px; color:var(--text-primary);">Platform Links</strong>
+          <ul class="footer-links">
+            <li><button type="button" onclick="switchView('main-view'); scrollToSection('resources-sec')">Study Material & PDFs</button></li>
+            <li><button type="button" onclick="switchView('main-view'); scrollToSection('mock-sec')">Technical Mock Tests</button></li>
+            <li><button type="button" onclick="switchView('main-view'); scrollToSection('doubts-sec')">Student Doubts Forum</button></li>
+            <li><a href="https://t.me/KP_CA" target="_blank" rel="noopener noreferrer">Official Telegram Channel</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <strong style="display:block; margin-bottom:10px; color:var(--text-primary);">Legal & Compliance</strong>
+          <ul class="footer-links">
+            <li><button type="button" onclick="switchView('privacy-view')">Privacy Policy</button></li>
+            <li><button type="button" onclick="switchView('terms-view')">Terms & Conditions</button></li>
+            <li><a href="/sitemap.xml">XML Sitemap</a></li>
+            <li><a href="/llms.txt">AI / LLMs Context</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 NiyuktiPoints. All rights reserved.</span>
+        <span>Secured with Supabase RLS & Google OAuth 2.0</span>
+      </div>
     </div>
   </footer>
 
+  <!-- ================= APPLICATION LOGIC (Strict Security & Sanitization) ================= -->
   <script>
-    const CONFIG = {
-      SUPABASE_URL: "https://tcezxjtyihyuorslkqif.supabase.co",
-      SUPABASE_ANON_KEY: "sb_publishable_xRGhaPLQesDYElQjvXPluQ_BT9aGl6r",
-      IMGBB_API_KEY: "5b722636406ba3f53aee42ad7fc02f03",
-      ADMIN_EMAIL: "kp.team.support@gmail.com"
-    };
-    const sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    // 1. CONFIGURATION (Public Anon Key Only — Protected by Supabase RLS)
+    const SUPABASE_URL = 'https://tcezxjtyihyuorslkqif.supabase.co';
+    const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE';
+    const ADMIN_EMAIL = 'kp.team.support@gmail.com';
 
-    let currentUser = null, currentProfile = null, allResources = [], allNotices = [], allToppers = [], allReviews = [], allDoubts = [], siteSettings = {};
-    let currentLang = 'en'; // Default English
+    let sbClient = null;
+    let currentUser = null;
+    let currentProfile = null;
+    let allResources = [];
+    let lastSubmitTime = 0;
 
-    function toggleLanguage() {
-      currentLang = currentLang === 'en' ? 'hi' : 'en';
-      document.getElementById('langToggleText').textContent = currentLang === 'en' ? 'Hinglish' : 'English';
-      
-      document.querySelectorAll('[data-en]').forEach(el => {
-        const text = el.getAttribute(`data-${currentLang}`);
-        if (text) el.textContent = text;
-      });
-      showToast(currentLang === 'hi' ? 'Hinglish mode enabled!' : 'English mode enabled!');
+    // 2. STRICT XSS SANITIZER (Prevents any HTML/Script injection)
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
-    window.addEventListener('DOMContentLoaded', async () => {
-      document.getElementById('currentYear').textContent = new Date().getFullYear();
-      lucide.createIcons();
-      updateOfflineCount();
-      await checkUserSession();
-      await loadAllDatabaseData();
-    });
+    function sanitizeURL(url) {
+      if (!url) return '#';
+      try {
+        const parsed = new URL(url, window.location.origin);
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+          return parsed.href;
+        }
+      } catch (e) {
+        return '#';
+      }
+      return '#';
+    }
 
     function showToast(msg) {
-      document.getElementById('toastText').textContent = msg;
-      document.getElementById('toastBox').style.display = 'flex';
-      setTimeout(() => document.getElementById('toastBox').style.display = 'none', 4000);
-    }
-    function hideToast() { document.getElementById('toastBox').style.display = 'none'; }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-    function toggleMobileMenu() { document.getElementById('mobileDrawer').classList.toggle('open'); }
-
-    async function checkUserSession() {
-      const { data: { session } } = await sb.auth.getSession();
-      if (session && session.user) { currentUser = session.user; await fetchOrCreateProfile(); }
+      const box = document.getElementById('toast-box');
+      const item = document.createElement('div');
+      item.className = 'toast';
+      item.textContent = msg;
+      box.appendChild(item);
+      setTimeout(() => item.remove(), 3500);
     }
 
-    async function fetchOrCreateProfile() {
-      const { data: existing } = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
-      if (!existing) {
-        const isAdmin = currentUser.email.toLowerCase() === CONFIG.ADMIN_EMAIL.toLowerCase();
-        const newProf = { id: currentUser.id, email: currentUser.email, full_name: currentUser.user_metadata?.full_name || 'Student', coins: 50, streak: 1, badges: isAdmin ? ['Founder'] : ['Student'], is_admin: isAdmin };
-        const { data: created } = await sb.from('profiles').insert([newProf]).select().maybeSingle();
-        currentProfile = created || newProf;
-      } else { currentProfile = existing; }
-      renderUserProfileUI();
-      if (currentProfile.pending_achievement) openAchievementModal(currentProfile.pending_achievement);
+    // 3. VIEW & THEME MANAGEMENT
+    function switchView(viewId) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(viewId);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function renderUserProfileUI() {
-      if (!currentProfile) return;
-      document.getElementById('headerAuthLabel').textContent = `${currentProfile.full_name} (${currentProfile.coins}c)`;
-      document.getElementById('logoutBtn').style.display = 'inline-flex';
-      document.getElementById('studentGreetingBadge').textContent = `${currentProfile.full_name} • ${currentProfile.coins} Coins`;
-      document.getElementById('studentProfileSection').classList.remove('hidden');
-      document.getElementById('profileNameHeading').textContent = currentProfile.full_name;
-      document.getElementById('profileBadgesList').innerHTML = (currentProfile.badges || []).map(b => `<span class="badge badge-solid">${b}</span>`).join('');
-      if (currentProfile.is_admin || currentProfile.email?.toLowerCase() === CONFIG.ADMIN_EMAIL.toLowerCase()) {
-        document.getElementById('openAdminBtn').style.display = 'inline-flex';
+    function scrollToSection(secId) {
+      const el = document.getElementById(secId);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem('np_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.textContent = saved === 'dark' ? 'Light' : 'Dark';
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('np_theme', next);
+      document.getElementById('theme-toggle').textContent = next === 'dark' ? 'Light' : 'Dark';
+    }
+
+    // 4. COOKIE CONSENT
+    function initCookieBanner() {
+      if (!localStorage.getItem('np_cookie_consent')) {
+        document.getElementById('cookie-banner').style.display = 'block';
       }
     }
 
-    function openAuthModal() { document.getElementById('authModal').classList.add('open'); }
-
-    async function handleAuthSubmit(e) {
-      e.preventDefault();
-      const email = document.getElementById('authEmail').value, password = document.getElementById('authPassword').value, fullName = document.getElementById('authFullName').value;
-      const { data, error } = await sb.auth.signInWithPassword({ email, password });
-      if (!error && data.user) { currentUser = data.user; await fetchOrCreateProfile(); closeModal('authModal'); showToast('Logged in!'); return; }
-      const { data: upData, error: upErr } = await sb.auth.signUp({ email, password, options: { data: { full_name: fullName || 'Student' } } });
-      if (upErr) showToast(upErr.message);
-      else { currentUser = upData.user; await fetchOrCreateProfile(); closeModal('authModal'); showToast('Account created!'); }
+    function acceptCookies(level) {
+      localStorage.setItem('np_cookie_consent', level);
+      document.getElementById('cookie-banner').style.display = 'none';
     }
 
-    async function handleLogout() { await sb.auth.signOut(); location.reload(); }
-
-    async function loadAllDatabaseData() {
-      const { data: st } = await sb.from('site_settings').select('*').eq('id', 1).maybeSingle();
-      if (st) {
-        siteSettings = st;
-        document.getElementById('founderNameEl').textContent = st.founder_name;
-        document.getElementById('founderPhotoEl').src = st.founder_photo;
+    // 5. GOOGLE OAUTH ONLY AUTHENTICATION
+    async function signInWithGoogle() {
+      if (!sbClient) {
+        showToast('Database client initializing. Verify your Supabase Anon Key.');
+        return;
       }
-      const { data: res } = await sb.from('resources').select('*').eq('is_active', true);
-      allResources = res || [];
+      const { error } = await sbClient.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      });
+      if (error) {
+        showToast('Google Sign-In error: ' + error.message);
+      }
+    }
+
+    async function signOutUser() {
+      if (!sbClient) return;
+      await sbClient.auth.signOut();
+      currentUser = null;
+      currentProfile = null;
+      updateAuthUI();
+      switchView('main-view');
+      showToast('Signed out safely.');
+    }
+
+    async function loadUserProfile(user) {
+      if (!user || !sbClient) return;
+      const { data, error } = await sbClient
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (!error && data) {
+        if (data.banned_until && new Date(data.banned_until) > new Date()) {
+          showToast('Account restricted: ' + (data.ban_reason || 'Policy violation'));
+          await sbClient.auth.signOut();
+          return;
+        }
+        currentProfile = data;
+      }
+      updateAuthUI();
+    }
+
+    function updateAuthUI() {
+      const loginBtn = document.getElementById('google-login-btn');
+      const profileBox = document.getElementById('user-profile-box');
+      const adminNav = document.getElementById('admin-nav-item');
+
+      if (currentUser) {
+        loginBtn.style.display = 'none';
+        profileBox.style.display = 'inline-flex';
+        const displayName = (currentProfile && currentProfile.full_name) || currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+        const coins = (currentProfile && typeof currentProfile.coins === 'number') ? currentProfile.coins : 50;
+        document.getElementById('user-name-label').textContent = displayName;
+        document.getElementById('user-coins-label').textContent = coins + ' Coins';
+
+        const isAdmin = (currentProfile && currentProfile.is_admin === true) || (currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL);
+        adminNav.style.display = isAdmin ? 'block' : 'none';
+      } else {
+        loginBtn.style.display = 'inline-flex';
+        profileBox.style.display = 'none';
+        adminNav.style.display = 'none';
+      }
+    }
+
+    // 6. FETCH PUBLIC DATA FROM SUPABASE (With Fallback Sample Items if DB is Empty)
+    async function loadPublicData() {
+      if (!sbClient) return;
+
+      // Load Notices
+      const { data: notices } = await sbClient.from('notices').select('*').order('created_at', { ascending: false }).limit(8);
+      renderNotices(notices || []);
+
+      // Load Study Resources
+      const { data: resources } = await sbClient.from('resources').select('*').order('created_at', { ascending: false });
+      allResources = resources || [];
       renderResources();
 
-      const { data: not } = await sb.from('notices').select('*').eq('is_active', true);
-      allNotices = not || [];
-      renderNotices();
+      // Load Mock Tests
+      const { data: mocks } = await sbClient.from('mock_tests').select('*').order('created_at', { ascending: false }).limit(6);
+      renderMocks(mocks || []);
 
-      const { data: top } = await sb.from('toppers').select('*');
-      allToppers = top || [];
-      renderToppers();
+      // Load Community Doubts
+      const { data: doubts } = await sbClient.from('doubts').select('*').order('created_at', { ascending: false }).limit(6);
+      renderDoubts(doubts || []);
+    }
 
-      const { data: rev } = await sb.from('reviews').select('*');
-      allReviews = rev || [];
-      renderReviews();
-
-      const { data: dbt } = await sb.from('doubts').select('*');
-      allDoubts = dbt || [];
-      renderDoubts();
+    function renderNotices(list) {
+      const container = document.getElementById('notices-container');
+      if (!list.length) {
+        container.innerHTML = `
+          <li class="notice-item">
+            <span class="notice-date">Official Update</span>
+            <span>BTEUP Semester Syllabus & Exam Pattern PDFs updated for 2026-27 session.</span>
+          </li>
+          <li class="notice-item">
+            <span class="notice-date">Recruitment Alert</span>
+            <span>SSC JE & UPPCL Junior Engineer Electrical/Civil previous year papers available below.</span>
+          </li>`;
+        return;
+      }
+      container.innerHTML = list.map(item => {
+        const title = escapeHTML(item.title || item.content || 'Official Update');
+        const dateStr = item.created_at ? new Date(item.created_at).toLocaleDateString('en-IN') : 'Recent';
+        const link = item.link || item.url ? `<a href="${sanitizeURL(item.link || item.url)}" target="_blank" rel="noopener noreferrer">View Notice →</a>` : '';
+        return `
+          <li class="notice-item">
+            <span class="notice-date">${escapeHTML(dateStr)}</span>
+            <span>${title} ${link}</span>
+          </li>`;
+      }).join('');
     }
 
     function renderResources() {
-      const branch = document.getElementById('branchSelect').value, sem = document.getElementById('semesterSelect').value, cat = document.getElementById('categorySelect').value;
-      const filtered = allResources.filter(i => i.branch === branch && (sem === 'ALL' || i.semester === sem) && (cat === 'ALL' || i.category === cat));
-      const grid = document.getElementById('resourcesGrid');
-      if (!filtered.length) { grid.innerHTML = `<div class="col-12"><div class="card"><h3>No materials found.</h3></div></div>`; return; }
-      grid.innerHTML = filtered.map(r => `
-        <div class="col-4"><div class="card">
-          <div><span class="badge">${r.category}</span><h3>${r.title}</h3><p>${r.subject} • ${r.semester}</p></div>
-          <div style="display:flex;gap:8px;"><a href="${r.resource_url}" target="_blank" class="btn btn-full">Open</a><button class="btn" onclick='saveOffline(${JSON.stringify(r)})'>Save</button></div>
-        </div></div>`).join('');
+      const container = document.getElementById('resources-container');
+      const query = (document.getElementById('search-resource').value || '').toLowerCase().trim();
+      const branch = document.getElementById('filter-branch').value;
+      const sem = document.getElementById('filter-sem').value;
+
+      const sourceList = allResources.length ? allResources : [
+        { title: 'Electrical Machines & Power Systems Complete Notes', branch: 'Electrical Engineering', semester: '5th Sem', url: '#resources-sec' },
+        { title: 'BTEUP Polytechnic Applied Mathematics PYQ Solved', branch: 'Common / All', semester: '2nd Sem', url: '#resources-sec' },
+        { title: 'UPPCL JE & SSC JE Electrical 1500+ MCQ Bank', branch: 'Electrical Engineering', semester: 'JE Exam', url: '#resources-sec' }
+      ];
+
+      const filtered = sourceList.filter(r => {
+        const rTitle = (r.title || '').toLowerCase();
+        const rBranch = r.branch || 'Common / All';
+        const rSem = r.semester || 'All';
+        const matchQ = !query || rTitle.includes(query) || rBranch.toLowerCase().includes(query);
+        const matchB = branch === 'ALL' || rBranch === branch;
+        const matchS = sem === 'ALL' || rSem === sem;
+        return matchQ && matchB && matchS;
+      });
+
+      if (!filtered.length) {
+        container.innerHTML = `<div class="card"><p>No matching resources found for this filter.</p></div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(r => `
+        <article class="card">
+          <div>
+            <div class="card-meta" style="margin-bottom:8px;">
+              <span class="tag">${escapeHTML(r.branch || 'Diploma')}</span>
+              <span class="tag">${escapeHTML(r.semester || 'Notes')}</span>
+            </div>
+            <h3>${escapeHTML(r.title || 'Study Material')}</h3>
+          </div>
+          <a href="${sanitizeURL(r.url || r.file_url || '#')}" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width:100%;">Access PDF / Notes</a>
+        </article>
+      `).join('');
     }
 
-    function renderNotices() {
-      document.getElementById('noticesGrid').innerHTML = allNotices.map(n => `
-        <div class="col-6"><div class="card">
-          ${n.image_url ? `<img src="${n.image_url}" class="notice-img" />` : ''}
-          <div><span class="badge badge-solid">${n.tag}</span><h3>${n.title}</h3><p>${n.summary}</p></div>
-          <a href="${n.pdf_url}" target="_blank" class="btn btn-full">View PDF</a>
-        </div></div>`).join('');
+    function renderMocks(list) {
+      const container = document.getElementById('mocks-container');
+      const source = list.length ? list : [
+        { title: 'SSC JE & RRB JE Technical CBT-1 Practice Set 01', branch: 'Electrical Engineering', duration: '60 Mins' },
+        { title: 'Basic Electrical & Electronics BTEUP Semester Quiz', branch: 'Common / All', duration: '30 Mins' },
+        { title: 'Utilization of Electrical Energy & Traction MCQ Test', branch: 'Electrical Engineering', duration: '45 Mins' }
+      ];
+
+      container.innerHTML = source.map(m => `
+        <article class="card">
+          <div>
+            <div class="card-meta" style="margin-bottom:8px;">
+              <span class="tag">${escapeHTML(m.branch || 'Technical')}</span>
+              <span>${escapeHTML(m.duration || '45 Mins')}</span>
+            </div>
+            <h3>${escapeHTML(m.title || 'Mock Test')}</h3>
+          </div>
+          <button type="button" class="btn btn-outline" onclick="handleMockAttempt('${escapeHTML(m.title || 'Mock Test')}')">Start Practice Set</button>
+        </article>
+      `).join('');
     }
 
-    function renderToppers() {
-      document.getElementById('toppersGrid').innerHTML = allToppers.filter(t => t.is_approved).map(t => `
-        <div class="col-4"><div class="card">
-          <div style="display:flex;align-items:center;gap:12px;"><img src="${t.photo_url}" class="topper-img" /><div><span class="badge badge-solid">${t.achievement_tag}</span><h3>${t.full_name}</h3></div></div>
-          <p>"${t.quote}" — <strong>${t.college}</strong></p>
-        </div></div>`).join('');
+    function handleMockAttempt(title) {
+      if (!currentUser) {
+        showToast('Please Sign in with Google to attempt mock tests and earn coins.');
+        return;
+      }
+      showToast('Opening test environment: ' + title);
     }
 
-    function renderReviews() {
-      document.getElementById('reviewsGrid').innerHTML = allReviews.filter(r => r.is_approved).map(r => `
-        <div class="col-4"><div class="card"><p>"${r.review_text}"</p><h4>${r.student_name}</h4><p>${r.branch_sem}</p></div></div>`).join('');
+    function renderDoubts(list) {
+      const container = document.getElementById('doubts-list-container');
+      if (!list.length) {
+        container.innerHTML = `
+          <div class="card">
+            <div class="card-meta"><span class="tag">Electrical Engineering</span><span>Verified Discussion</span></div>
+            <p><strong>Q:</strong> How to prepare for UPPCL JE alongside 6th semester polytechnic exams?</p>
+            <p style="font-size:0.82rem; color:var(--text-muted);">Focus on core diploma subjects (Machines, Power Systems, Basic Electrical) and solve 50 previous year JE MCQs daily.</p>
+          </div>`;
+        return;
+      }
+      container.innerHTML = list.map(d => `
+        <div class="card">
+          <div class="card-meta">
+            <span class="tag">${escapeHTML(d.subject || 'Academic Doubt')}</span>
+            <span>${d.created_at ? new Date(d.created_at).toLocaleDateString('en-IN') : 'Recent'}</span>
+          </div>
+          <p>${escapeHTML(d.question || d.content || '')}</p>
+        </div>
+      `).join('');
     }
 
-    function renderDoubts() {
-      document.getElementById('doubtsGrid').innerHTML = allDoubts.filter(d => !d.reply_to_id).map(q => `
-        <div class="col-6"><div class="card">
-          <span class="badge">${q.student_name}</span>
-          <img src="${q.question_image_url}" class="notice-img" />
-          <button class="btn btn-full" onclick="openDoubtModal('${q.id}')">Upload Solution (+20c)</button>
-        </div></div>`).join('');
-    }
+    // 7. SPAM-PROTECTED & RATE-LIMITED FORM SUBMISSION
+    async function submitDoubt(e) {
+      e.preventDefault();
+      // Check Honeypot (Bot trap)
+      const hp = document.getElementById('doubt-hp').value;
+      if (hp) return;
 
-    function saveOffline(item) {
-      const saved = JSON.parse(localStorage.getItem('np_off') || '[]');
-      if (!saved.find(x => x.title === item.title)) saved.push(item);
-      localStorage.setItem('np_off', JSON.stringify(saved));
-      updateOfflineCount();
-      showToast('Saved offline!');
-    }
-    function updateOfflineCount() { document.getElementById('offlineCount').textContent = JSON.parse(localStorage.getItem('np_off') || '[]').length; }
-    function openOfflineSavedModal() {
-      const saved = JSON.parse(localStorage.getItem('np_off') || '[]');
-      document.getElementById('offlineListContainer').innerHTML = saved.map(s => `<p><strong>${s.title}</strong></p>`).join('') || '<p>No saved items.</p>';
-      document.getElementById('offlineModal').classList.add('open');
-    }
+      if (!currentUser) {
+        showToast('Please Sign in with Google first to post a question.');
+        return;
+      }
 
-    function startSampleMockTest() {
-      document.getElementById('cbtQuestionContainer').innerHTML = `<p>Q1. Motor for railway traction?</p><button class="btn btn-full" onclick="completeTest(true)">DC Series Motor</button>`;
-      document.getElementById('cbtModal').classList.add('open');
-    }
-    async function completeTest(correct) {
-      closeModal('cbtModal');
-      if (correct && currentUser) {
-        await sb.from('profiles').update({ coins: currentProfile.coins + 25 }).eq('id', currentUser.id);
-        showToast('Correct! +25 Coins earned.');
+      // Client Rate Limiting (30 seconds cooldown)
+      const now = Date.now();
+      if (now - lastSubmitTime < 30000) {
+        showToast('Please wait 30 seconds before posting another question.');
+        return;
+      }
+
+      const subject = document.getElementById('doubt-subject').value.trim();
+      const question = document.getElementById('doubt-question').value.trim();
+
+      if (subject.length < 3 || question.length < 10) {
+        showToast('Please enter a valid subject and a clear question (min 10 characters).');
+        return;
+      }
+
+      const btn = document.getElementById('doubt-submit-btn');
+      btn.disabled = true;
+
+      const { error } = await sbClient.from('doubts').insert([
+        {
+          subject: subject,
+          question: question,
+          user_id: currentUser.id
+        }
+      ]);
+
+      btn.disabled = false;
+      if (error) {
+        showToast('Could not submit doubt: ' + error.message);
+      } else {
+        lastSubmitTime = Date.now();
+        document.getElementById('doubt-form').reset();
+        showToast('Your doubt has been posted!');
+        loadPublicData();
       }
     }
-    function unlockCopyTipsAchievement() { showToast('Revision marked! +10 Coins'); }
-    function openAchievementModal(b) { document.getElementById('achievementModal').classList.add('open'); }
-    async function submitTopperClaim(e) { e.preventDefault(); showToast('Submitted for approval!'); closeModal('achievementModal'); }
-    function openReviewModal() { document.getElementById('reviewModal').classList.add('open'); }
-    async function submitStudentReview(e) { e.preventDefault(); showToast('Review submitted!'); closeModal('reviewModal'); }
-    function openDoubtModal(id) { document.getElementById('doubtModal').classList.add('open'); }
-    async function submitDoubtImage(e) { e.preventDefault(); showToast('Doubt image posted!'); closeModal('doubtModal'); }
-    async function submitStudentForm(e) { e.preventDefault(); showToast('Request sent successfully!'); e.target.reset(); }
-    async function toggleAdminPanel() { document.getElementById('adminPanelSection').classList.toggle('hidden'); }
-    async function saveAdminSettings(e) { e.preventDefault(); showToast('Settings saved!'); }
+
+    // 8. ADMIN PANEL ACTIONS (Protected by Database RLS)
+    async function adminAddNotice(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+      const title = document.getElementById('adm-notice-title').value.trim();
+      const link = document.getElementById('adm-notice-link').value.trim();
+
+      const { error } = await sbClient.from('notices').insert([{ title, link }]);
+      if (error) {
+        showToast('Admin error: ' + error.message);
+      } else {
+        e.target.reset();
+        showToast('Notice published!');
+        loadPublicData();
+      }
+    }
+
     async function adminAddResource(e) {
       e.preventDefault();
-      await sb.from('resources').insert([{ branch: 'Electrical Engineering', semester: '6th Semester', category: 'PDF Notes', subject: document.getElementById('resSub').value, title: document.getElementById('resTitle').value, resource_url: document.getElementById('resUrl').value }]);
-      showToast('Published!');
+      if (!currentUser) return;
+      const title = document.getElementById('adm-res-title').value.trim();
+      const branch = document.getElementById('adm-res-branch').value;
+      const semester = document.getElementById('adm-res-sem').value;
+      const url = document.getElementById('adm-res-url').value.trim();
+
+      const { error } = await sbClient.from('resources').insert([{ title, branch, semester, url }]);
+      if (error) {
+        showToast('Admin error: ' + error.message);
+      } else {
+        e.target.reset();
+        showToast('Resource added successfully!');
+        loadPublicData();
+      }
     }
+
+    // 9. INITIALIZE APPLICATION
+    window.addEventListener('DOMContentLoaded', async () => {
+      initTheme();
+      initCookieBanner();
+
+      // Render fallback UI immediately for fast page speed
+      renderNotices([]);
+      renderResources();
+      renderMocks([]);
+      renderDoubts([]);
+
+      if (window.supabase && SUPABASE_ANON_KEY !== 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE') {
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const { data: { session } } = await sbClient.auth.getSession();
+        if (session && session.user) {
+          currentUser = session.user;
+          await loadUserProfile(currentUser);
+        }
+
+        sbClient.auth.onAuthStateChange(async (_event, session) => {
+          currentUser = session ? session.user : null;
+          if (currentUser) {
+            await loadUserProfile(currentUser);
+          } else {
+            updateAuthUI();
+          }
+        });
+
+        await loadPublicData();
+      }
+    });
   </script>
 </body>
 </html>
