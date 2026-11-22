@@ -512,59 +512,6 @@
     }
     .hp-trap { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
 
-    /* Live Chat Window */
-    .chat-box {
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      background-color: var(--bg-surface);
-      height: 440px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .chat-head {
-      padding: 12px 16px;
-      background-color: var(--bg-subtle);
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
-      font-size: 0.875rem;
-    }
-    .chat-feed {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background-color: var(--bg-canvas);
-    }
-    .chat-msg {
-      max-width: 82%;
-      padding: 10px 14px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
-      background-color: var(--bg-surface);
-      font-size: 0.875rem;
-      align-self: flex-start;
-    }
-    .chat-msg.self {
-      align-self: flex-end;
-      background-color: var(--brand);
-      color: #ffffff;
-      border-color: transparent;
-    }
-    [data-theme="dark"] .chat-msg.self { color: #0b1120; }
-    .chat-form {
-      display: flex;
-      gap: 8px;
-      padding: 12px;
-      border-top: 1px solid var(--border-subtle);
-      background-color: var(--bg-surface);
-    }
-
     /* CBT Test Arena */
     .cbt-runner {
       border: 2px solid var(--brand);
@@ -968,30 +915,7 @@
     <div class="container">
       <div class="grid-2" style="margin-bottom:32px;">
         
-        <!-- Real-Time Student Chat (Supabase Realtime WebSocket) -->
-        <div>
-          <div class="section-head" style="margin-bottom:12px;">
-            <div>
-              <h2>Live Engineering Student Chat</h2>
-              <p>Real-time discussion synced via Supabase Realtime</p>
-            </div>
-          </div>
-
-          <div class="chat-box">
-            <div class="chat-head">
-              <span><span class="status-dot" style="display:inline-block; margin-right:6px;"></span> Polytechnic & JE Live Channel</span>
-              <span class="mono" style="font-size:0.74rem; color:var(--text-muted);">Anti-Spam Active</span>
-            </div>
-            <div class="chat-feed" id="realtime-chat-feed"></div>
-            <form class="chat-form" onsubmit="handleSendChatMessage(event)" autocomplete="off">
-              <input type="text" id="hp-chat-trap" class="hp-trap" tabindex="-1" autocomplete="off" />
-              <input type="text" id="chat-input-box" class="input" required maxlength="280" placeholder="Write a message (Google Sign-In required)..." />
-              <button type="submit" class="btn btn-primary" id="chat-send-btn">Send</button>
-            </form>
-          </div>
-        </div>
-
-        <!-- Structured Academic Doubts Forum -->
+        <!-- Academic Doubts Only: general live chat removed -->
         <div>
           <div class="section-head" style="margin-bottom:12px;">
             <div>
@@ -999,7 +923,6 @@
               <p>Post subject-specific questions for peer and faculty resolution</p>
             </div>
           </div>
-
           <div class="panel" style="margin-bottom:16px;">
             <form onsubmit="handlePostAcademicDoubt(event)" autocomplete="off">
               <input type="text" id="hp-doubt-trap" class="hp-trap" tabindex="-1" autocomplete="off" />
@@ -1010,8 +933,7 @@
               <button type="submit" class="btn btn-primary" id="doubt-post-btn" style="width:100%;">Post Academic Doubt</button>
             </form>
           </div>
-
-          <div id="academic-doubts-list" style="display:flex; flex-direction:column; gap:10px; max-height:290px; overflow-y:auto;"></div>
+          <div id="academic-doubts-list" style="display:flex; flex-direction:column; gap:10px; max-height:460px; overflow-y:auto;"></div>
         </div>
 
       </div>
@@ -1545,7 +1467,7 @@
       overview: 'NiyuktiPoints — BTEUP Diploma Engineering & JE Preparation Portal',
       library: 'Study Library & PYQs | NiyuktiPoints',
       cbt: 'Technical CBT Mock Tests | NiyuktiPoints',
-      community: 'Live Student Chat & Doubts Q&A | NiyuktiPoints',
+      community: 'Academic Doubts & Reviews | NiyuktiPoints',
       hub: 'My Engineering Study Hub | NiyuktiPoints',
       admin: 'Administrator Control Studio | NiyuktiPoints',
       privacy: 'Privacy Policy | NiyuktiPoints',
@@ -2116,75 +2038,25 @@
     }
 
     function renderCommunityFeeds() {
-      const chatFeed = document.getElementById('realtime-chat-feed');
       const doubtsBox = document.getElementById('academic-doubts-list');
+      if (!doubtsBox) return;
       const adminMode = isUserAdmin();
-
-      const chatItems = dbDoubts.filter(d => (d.entry_type || 'chat') === 'chat').slice().reverse();
       const doubtItems = dbDoubts.filter(d => d.entry_type === 'doubt');
-
-      if (!chatItems.length) {
-        chatFeed.innerHTML = `<div class="empty-state">No live chat messages yet. Start the conversation below!</div>`;
-      } else {
-        chatFeed.innerHTML = chatItems.map(msg => {
-          const isMine = activeUser && msg.user_id === activeUser.id;
-          return `
-            <div class="chat-msg ${isMine ? 'self' : ''}">
-              <div style="display:flex; justify-content:space-between; gap:10px; font-size:0.72rem; opacity:0.82; margin-bottom:2px;">
-                <strong>${esc(msg.user_name || msg.subject || 'Student')}</strong>
-                ${adminMode ? `<span style="cursor:pointer; text-decoration:underline;" onclick="adminDeleteRow('doubts', '${esc(msg.id)}')">Delete</span>` : ''}
-              </div>
-              <div>${esc(msg.question || msg.content)}</div>
-            </div>
-          `;
-        }).join('');
-        chatFeed.scrollTop = chatFeed.scrollHeight;
-      }
 
       if (!doubtItems.length) {
         doubtsBox.innerHTML = `<div class="empty-state">No academic doubts posted yet.</div>`;
-      } else {
-        doubtsBox.innerHTML = doubtItems.map(d => `
-          <div class="panel" style="padding:14px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-              <span class="eyebrow-tag" style="margin:0;">${esc(d.subject || 'Academic Doubt')}</span>
-              ${adminMode ? `<button type="button" class="btn btn-danger btn-sm" onclick="adminDeleteRow('doubts', '${esc(d.id)}')">Delete</button>` : ''}
-            </div>
-            <p style="font-size:0.9rem; font-weight:600;">Q: ${esc(d.question)}</p>
-            <span style="font-size:0.75rem; color:var(--text-muted);">Posted by ${esc(d.user_name || 'Student')}</span>
+        return;
+      }
+      doubtsBox.innerHTML = doubtItems.map(d => `
+        <div class="panel" style="padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span class="eyebrow-tag" style="margin:0;">${esc(d.subject || 'Academic Doubt')}</span>
+            ${adminMode ? `<button type="button" class="btn btn-danger btn-sm" onclick="adminDeleteRow('doubts', '${esc(d.id)}')">Delete</button>` : ''}
           </div>
-        `).join('');
-      }
-    }
-
-    async function handleSendChatMessage(e) {
-      e.preventDefault();
-      if (document.getElementById('hp-chat-trap').value) return;
-      if (!activeUser) return notify('Please Sign in with Google to chat.');
-      if (Date.now() - lastWriteCooldown < 4000) return notify('Please wait a moment before sending another message.');
-
-      const input = document.getElementById('chat-input-box');
-      const text = input.value.trim();
-      if (text.length < 2) return;
-
-      const btn = document.getElementById('chat-send-btn');
-      btn.disabled = true;
-      const sender = (activeProfile && activeProfile.full_name) || activeUser.email.split('@')[0];
-
-      const { error } = await sb.from('doubts').insert([{
-        user_id: activeUser.id,
-        user_name: sender,
-        entry_type: 'chat',
-        subject: sender,
-        question: text
-      }]);
-
-      btn.disabled = false;
-      if (error) notify('Chat error: ' + error.message);
-      else {
-        lastWriteCooldown = Date.now();
-        input.value = '';
-      }
+          <p style="font-size:0.9rem; font-weight:600;">Q: ${esc(d.question || d.content || '')}</p>
+          <span style="font-size:0.75rem; color:var(--text-muted);">Posted by ${esc(d.user_name || 'Student')}</span>
+        </div>
+      `).join('');
     }
 
     async function handlePostAcademicDoubt(e) {
