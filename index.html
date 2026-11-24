@@ -1162,8 +1162,10 @@
               </div>
             </div>
             <div class="field-group">
-              <label>PDF / Google Drive URL</label>
-              <input type="url" id="adm-res-url" class="input" required placeholder="https://..." />
+              <label>PDF / Google Drive URL (optional if uploading file)</label>
+            <input type="url" id="adm-res-url" class="input" placeholder="https://..." />
+            <label>Or upload file directly (PDF, image, document)</label>
+            <input type="file" id="adm-res-file" class="input" accept=".pdf,.png,.jpg,.jpeg,.webp,.doc,.docx,.ppt,.pptx" />
             </div>
             <div class="field-group">
               <label>Custom Cover Image URL (Optional)</label>
@@ -1197,25 +1199,8 @@
                 <input type="number" id="adm-mock-duration" class="input" value="15" min="1" required />
               </div>
             </div>
-            <div class="field-group">
-              <label>Question Prompt</label>
-              <input type="text" id="adm-mock-q" class="input" required placeholder="Enter MCQ question text..." />
-            </div>
-            <div class="grid-2" style="gap:8px; margin-bottom:10px;">
-              <input type="text" id="adm-mock-opt0" class="input" required placeholder="Option A" />
-              <input type="text" id="adm-mock-opt1" class="input" required placeholder="Option B" />
-              <input type="text" id="adm-mock-opt2" class="input" required placeholder="Option C" />
-              <input type="text" id="adm-mock-opt3" class="input" required placeholder="Option D" />
-            </div>
-            <div class="field-group">
-              <label>Correct Option Index (0=A, 1=B, 2=C, 3=D)</label>
-              <select id="adm-mock-ans">
-                <option value="0">Option A (0)</option>
-                <option value="1">Option B (1)</option>
-                <option value="2">Option C (2)</option>
-                <option value="3">Option D (3)</option>
-              </select>
-            </div>
+            <div id="adm-mock-question-list" class="col" style="gap:14px;"></div>
+            <button type="button" class="btn btn-outline" onclick="addMockQuestionEditor()">+ Add Question</button>
             <button type="submit" class="btn btn-primary" style="width:100%;">Publish CBT Mock Test</button>
           </form>
         </div>
@@ -2243,15 +2228,27 @@
 
     async function adminAddResource(e) {
       e.preventDefault();
-      if (!isUserAdmin()) return;
+      if (!isUserAdmin() || !sb) return notify('Administrator access and database connection required.');
       const title = document.getElementById('adm-res-title').value.trim();
       const branch = document.getElementById('adm-res-branch').value;
       const semester = document.getElementById('adm-res-sem').value;
-      const url = cleanURL(document.getElementById('adm-res-url').value.trim());
+      let url = cleanURL(document.getElementById('adm-res-url').value.trim());
       const image_url = cleanURL(document.getElementById('adm-res-img').value.trim());
-
+      const fileInput = document.getElementById('adm-res-file');
+      const file = fileInput && fileInput.files && fileInput.files[0];
+      if (!title) return notify('Enter the resource title.');
+      if (!url && !file) return notify('Provide a resource URL or upload a file.');
+      if (file) {
+        const allowed = ['application/pdf','image/png','image/jpeg','image/webp','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation'];
+        if (!allowed.includes(file.type) || file.size > 20 * 1024 * 1024) return notify('File type not supported or file exceeds 20 MB.');
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(-100);
+        const storagePath = 'admin/' + Date.now() + '_' + safeName;
+        const { error: uploadError } = await sb.storage.from('study-materials').upload(storagePath, file, { upsert: false });
+        if (uploadError) return notify('Upload failed: ' + uploadError.message);
+        url = sb.storage.from('study-materials').getPublicUrl(storagePath).data.publicUrl;
+      }
       const { error } = await sb.from('resources').insert([{ title, branch, semester, url, image_url }]);
-      if (error) notify('Error: ' + error.message);
+      if (error) notify('Database save failed: ' + error.message);
       else {
         e.target.reset();
         notify('Study resource published!');
@@ -2259,33 +2256,62 @@
       }
     }
 
+    function addMockQuestionEditor() {
+      const box = document.getElementById('adm-mock-question-list');
+      if (!box) return;
+      const index = box.children.length + 1;
+      const editor = document.createElement('section');
+      editor.className = 'panel mock-question-editor';
+      editor.style.padding = '14px';
+      editor.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">
+          <strong>Question ${index}</strong>
+          ${index > 1 ? '<button type="button" class="btn btn-outline" onclick="removeMockQuestionEditor(this)">Remove</button>' : ''}
+        </div>
+        <div class="field-group"><label>Question Prompt</label><textarea class="input mock-q-text" required maxlength="1000" rows="3" placeholder="Enter MCQ question text..."></textarea></div>
+        <div class="grid-2" style="gap:8px;margin-bottom:10px;">
+          <input type="text" class="input mock-q-opt" required maxlength="300" placeholder="Option A" />
+          <input type="text" class="input mock-q-opt" required maxlength="300" placeholder="Option B" />
+          <input type="text" class="input mock-q-opt" required maxlength="300" placeholder="Option C" />
+          <input type="text" class="input mock-q-opt" required maxlength="300" placeholder="Option D" />
+        </div>
+        <div class="field-group"><label>Correct Option</label><select class="input mock-q-answer"><option value="0">Option A</option><option value="1">Option B</option><option value="2">Option C</option><option value="3">Option D</option></select></div>`;
+      box.appendChild(editor);
+      editor.querySelector('.mock-q-text').focus();
+    }
+
+    function removeMockQuestionEditor(button) {
+      const editor = button.closest('.mock-question-editor');
+      if (editor) editor.remove();
+      document.querySelectorAll('#adm-mock-question-list .mock-question-editor').forEach((row, idx) => {
+        const heading = row.querySelector('strong');
+        if (heading) heading.textContent = 'Question ' + (idx + 1);
+      });
+    }
+
     async function adminAddMockTest(e) {
       e.preventDefault();
-      if (!isUserAdmin()) return;
+      if (!isUserAdmin() || !sb) return notify('Administrator access and database connection required.');
       const title = document.getElementById('adm-mock-title').value.trim();
       const branch = document.getElementById('adm-mock-branch').value;
       const duration_mins = Number(document.getElementById('adm-mock-duration').value);
-      const q = document.getElementById('adm-mock-q').value.trim();
-      const opts = [
-        document.getElementById('adm-mock-opt0').value.trim(),
-        document.getElementById('adm-mock-opt1').value.trim(),
-        document.getElementById('adm-mock-opt2').value.trim(),
-        document.getElementById('adm-mock-opt3').value.trim()
-      ];
-      const ans = Number(document.getElementById('adm-mock-ans').value);
-
-      const { error } = await sb.from('mock_tests').insert([{
-        title,
-        branch,
-        duration_mins,
-        max_marks: portalRules.max_number,
-        questions: [{ q, opts, ans }]
-      }]);
-
+      const editors = [...document.querySelectorAll('#adm-mock-question-list .mock-question-editor')];
+      const questions = editors.map(row => ({
+        q: row.querySelector('.mock-q-text').value.trim(),
+        opts: [...row.querySelectorAll('.mock-q-opt')].map(opt => opt.value.trim()),
+        ans: Number(row.querySelector('.mock-q-answer').value)
+      }));
+      if (!title || !Number.isFinite(duration_mins) || duration_mins < 1 || !questions.length || questions.some(q => q.q.length < 3 || q.opts.length !== 4 || q.opts.some(opt => !opt))) {
+        return notify('Complete the title, duration, and all question/option fields before publishing.');
+      }
+      const { error } = await sb.from('mock_tests').insert([{ title, branch, duration_mins, max_marks: portalRules.max_number, questions }]);
       if (error) notify('Error: ' + error.message);
       else {
         e.target.reset();
-        notify('CBT Mock Test published!');
+        const list = document.getElementById('adm-mock-question-list');
+        if (list) list.innerHTML = '';
+        addMockQuestionEditor();
+        notify('CBT test published with ' + questions.length + ' questions.');
         fetchAllDatabaseTables();
       }
     }
@@ -2401,6 +2427,11 @@
 
         await fetchAllDatabaseTables();
         subscribeRealtimeFeed();
+      }
+
+      // Initialize the CBT question builder with one blank question.
+      if (document.getElementById('adm-mock-question-list') && !document.querySelector('#adm-mock-question-list .mock-question-editor')) {
+        addMockQuestionEditor();
       }
 
       // Restore workspace view from URL hash if valid
