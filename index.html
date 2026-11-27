@@ -1842,7 +1842,7 @@
               <strong style="font-size:0.95rem; display:block;">${esc(t.name)}</strong>
               <span style="font-size:0.8rem; color:var(--text-muted);">${esc(t.branch || t.college || '')}</span>
             </div>
-            <span class="status-badge">${esc(t.score || 'Rank #1')}</span>
+            <span class="status-badge">${esc(t.score || 'Score not provided')}</span>
             ${adminMode ? `<button type="button" class="btn btn-danger btn-sm" onclick="adminDeleteRow('toppers', '${esc(t.id)}')">Delete</button>` : ''}
           </div>
         `;
