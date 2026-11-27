@@ -2096,12 +2096,12 @@
         <article class="panel" style="padding:16px; display:flex; flex-direction:column; justify-content:space-between; gap:10px;">
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <span class="mono" style="font-weight:700; color:var(--accent-amber);">${esc(r.rating || 5)} / 5 STARS</span>
+              <span class="mono" style="font-weight:700; color:var(--accent-amber);">${r.rating ? `${esc(r.rating)} / 5 STARS` : 'Rating not provided'}</span>
               ${adminMode ? `<button type="button" class="btn btn-danger btn-sm" onclick="adminDeleteRow('reviews', '${esc(r.id)}')">Delete</button>` : ''}
             </div>
             <p style="font-size:0.88rem;">"${esc(r.content)}"</p>
           </div>
-          <span style="font-size:0.76rem; color:var(--text-muted); font-weight:600;">— ${esc(r.user_name || 'Verified Student')} (${esc(r.branch || 'Diploma')})</span>
+          <span style="font-size:0.76rem; color:var(--text-muted); font-weight:600;">— ${esc(r.user_name || 'Student')} (${esc(r.branch || 'Diploma')})</span>
         </article>
       `).join('');
     }
